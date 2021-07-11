@@ -1,7 +1,7 @@
 use std::io::BufReader;
 use std::fs::File;
 use anyhow::{ Context, Result };
-use log::{info, warn};
+use log::{info, warn, error, debug, trace };
 use structopt::StructOpt;
 extern crate clap_verbosity_flag;
 
@@ -18,8 +18,12 @@ struct Cli {
 
 fn main() -> Result<()> {
     env_logger::init();
-    info!("Hello from Print Nanny");
-    warn!("Warning from Print Nanny");
+
+    trace!("Example TRACE from Print Nanny");
+    debug!("Example DEBUG from Print Nanny");
+    info!("Example INFO from Print Nanny");
+    warn!("Example WARNING from Print Nanny");
+    error!("Example ERROR from Print Nanny");
     let args = Cli::from_args();
     
     // TODO read from BufReader instead of loading entire file into memory
