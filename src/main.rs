@@ -19,11 +19,11 @@ struct Cli {
 fn main() -> Result<()> {
     env_logger::init();
 
-    trace!("Example TRACE from Print Nanny");
-    debug!("Example DEBUG from Print Nanny");
-    info!("Example INFO from Print Nanny");
-    warn!("Example WARNING from Print Nanny");
-    error!("Example ERROR from Print Nanny");
+    // trace!("Example TRACE from Print Nanny");
+    // debug!("Example DEBUG from Print Nanny");
+    // info!("Example INFO from Print Nanny");
+    // warn!("Example WARNING from Print Nanny");
+    // error!("Example ERROR from Print Nanny");
     let args = Cli::from_args();
     
     // TODO read from BufReader instead of loading entire file into memory
@@ -36,11 +36,10 @@ fn main() -> Result<()> {
     //         println!("{}", line);
     //     }  
     // }
-    let path = "test.txt";
-    let content = std::fs::read_to_string(path)
-        .with_context(|| format!("could not read file `{}`", path))?;
-    let mut result: Vec<u8> = Vec::new();
+    let content = std::fs::read_to_string(&args.path)
+        .with_context(|| format!("could not read file `{}`", args.path.display()))?;
 
-    printnanny::find_matches(&content, &args.pattern, result);
+
+    printnanny::find_matches(&content, &args.pattern, &mut std::io::stdout());
     Ok(())
 }
