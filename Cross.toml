@@ -1,0 +1,10 @@
+[build.env]
+passthrough = [
+    "RUST_BACKTRACE",
+    "RUST_LOG",
+]
+
+[target.aarch64-unknown-linux-gnu.env]
+volumes = [
+    "BUILD_DIR",
+]

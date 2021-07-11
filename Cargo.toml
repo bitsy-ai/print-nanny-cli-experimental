@@ -3,6 +3,12 @@ name = "printnanny"
 version = "0.1.0"
 authors = ["Leigh Johnson <leigh@bitsy.ai>"]
 edition = "2018"
+license = "AGPLv3"
+readme = "README.md"
+homepage = "https://github.com/bitsy-ai/print-nanny-cli"
+repository = "https://github.com/bitsy-ai/print-nanny-cli"
+keywords = ["cli"]
+categories = ["command-line-utilities"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
