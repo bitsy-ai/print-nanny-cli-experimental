@@ -1,5 +1,5 @@
 [package]
-name = "print-nanny-cli"
+name = "print-nanny"
 version = "0.1.0"
 authors = ["Leigh Johnson <leigh@bitsy.ai>"]
 edition = "2018"
