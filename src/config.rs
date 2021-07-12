@@ -1,19 +1,23 @@
 
-use serde::{Serialize, Deserialize};
-use snafu::{ResultExt, Snafu, ensure };
-use anyhow::{Context, Result};
+use serde::{ Serialize, Deserialize };
+use snafu::{ ResultExt, Snafu, ensure };
+use anyhow::{ Context, Result };
+use print_nanny_client::models::email_auth_request::{ EmailAuthRequest };
+use print_nanny_client::apis::auth_api::{ auth_email_create, auth_verify_create };
+use print_nanny_client::apis::{ configuration};
+
 
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct PrintNannyConfig {
-    api_key: String,
+    api_token: String,
     api_url: String,
     email: String
 }
 
 impl ::std::default::Default for PrintNannyConfig {
     fn default() -> Self { Self { 
-        api_url: "https://www.print-nanny.com/api/".into(),
-        api_key: "".into(),
+        api_url: "https://www.print-nanny.com/".into(),
+        api_token: "".into(),
         email: "".into()
     }}
 }
@@ -21,17 +25,35 @@ impl ::std::default::Default for PrintNannyConfig {
 #[derive(Debug, Snafu, PartialEq)]
 pub enum Error {
     #[snafu(display("Received blank config value for key: {} config", key))]
-    AuthRequired { key: String },
+    MissingConfig { key: String },
 }
 
 pub fn check_config(config: &PrintNannyConfig) ->  Result<(), Error> {
-    ensure!(!config.api_key.is_empty(), AuthRequired {
-        key: "api_key".to_string()
+    ensure!(!config.api_token.is_empty(), MissingConfig {
+        key: "api_token".to_string()
     });
-    ensure!(!config.email.is_empty(), AuthRequired {
+    ensure!(!config.email.is_empty(), MissingConfig {
         key: "email".to_string()
     });
     Ok(())
+}
+#[test]
+fn check_config_missing_api_token(){
+    let config = PrintNannyConfig{..PrintNannyConfig::default()};
+    let result = check_config(&config);
+    let expected = Err(Error::MissingConfig{
+        key: "api_token".to_string()
+    });
+    assert_eq!(result, expected);
+}
+#[test]
+fn check_config_missing_email(){
+    let config = PrintNannyConfig{api_token: "abc123".to_string(), ..PrintNannyConfig::default()};
+    let result = check_config(&config);
+    let expected = Err(Error::MissingConfig{
+        key: "email".to_string()
+    });
+    assert_eq!(result, expected);
 }
 
 pub fn load_config(configfile: &str, default_configfile: &str) -> Result<PrintNannyConfig, confy::ConfyError> {
@@ -42,21 +64,10 @@ pub fn load_config(configfile: &str, default_configfile: &str) -> Result<PrintNa
     }
 }
 
-#[test]
-fn check_config_missing_api_key(){
-    let config = PrintNannyConfig{..PrintNannyConfig::default()};
-    let result = check_config(&config);
-    let expected = Err(Error::AuthRequired{
-        key: "api_key".to_string()
-    });
-    assert_eq!(result, expected);
-}
-#[test]
-fn check_config_missing_email(){
-    let config = PrintNannyConfig{api_key: "abc123".to_string(), ..PrintNannyConfig::default()};
-    let result = check_config(&config);
-    let expected = Err(Error::AuthRequired{
-        key: "email".to_string()
-    });
-    assert_eq!(result, expected);
+pub fn auth_send_verify_email(email: &str, config: &PrintNannyConfig) {
+    let auth_request = EmailAuthRequest{email:email.to_string()};
+    let api_config = configuration::Configuration{
+        base_path:config.api_url.to_string(), ..Default::default() 
+    };
+
 }
