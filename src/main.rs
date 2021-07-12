@@ -63,6 +63,8 @@ fn main() -> Result<()> {
 
     let mut config = load_config(&configfile, &default_configfile)?;
 
+    let mut rt = tokio::runtime::Runtime::new().unwrap();
+
     if let Some(api_url) = matches.value_of("api-url") {
         config.api_url = api_url.to_string();
         info!("Using api-url {}", config.api_url);
@@ -70,8 +72,8 @@ fn main() -> Result<()> {
     if let Some(matches) = matches.subcommand_matches("auth") {
         let email = matches.value_of("email").unwrap();
         info!("Sending two-factor auth request for {}", email.to_string());
-        let verify_email_future = auth_send_verify_email(email, &config)?;
-        info!("Received response {}", verify_email_future.email.to_string());
+        rt.block_on(auth_send_verify_email(email, &config));
+        info!("Received response");
 
     }
 

@@ -66,11 +66,10 @@ pub fn load_config(configfile: &str, default_configfile: &str) -> Result<PrintNa
     }
 }
 
-pub fn auth_send_verify_email(email: &str, config: &PrintNannyConfig) -> Result<EmailAuth, PrintNannyClientError<AuthEmailCreateError>>  {
+pub async fn auth_send_verify_email(email: &str, config: &PrintNannyConfig) -> Result<EmailAuth, PrintNannyClientError<AuthEmailCreateError>>  {
     let request = EmailAuthRequest{email:email.to_string()};
     let api_config = print_nanny_client::apis::configuration::Configuration{
         base_path:config.api_url.to_string(), ..Default::default() 
     };
-    let future = auth_email_create(&api_config, request);
-    block_on(future)
+    return auth_email_create(&api_config, request).await;
 }
