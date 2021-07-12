@@ -3,7 +3,7 @@ use std::fs::File;
 use anyhow::{ Context, Result };
 use log::{info, warn, error, debug, trace };
 use structopt::StructOpt;
-use printnanny::{ PrintNannyConfig };
+use printnanny::{ PrintNannyConfig, check_config, load_config };
 extern crate clap;
 use clap::{ Arg, App, SubCommand };
 extern crate confy;
@@ -31,15 +31,10 @@ fn main() -> Result<()> {
     let configfile = matches.value_of("config").unwrap_or(default_configfile);
     info!("Using config file: {}", configfile);
 
-    if configfile == default_configfile {
-        let config = confy::load(configfile)?; // platform-specific default config path
-    } else {
-        let config = confy::load_path(configfile)?; // load full path instead
-    }
+    let config = load_config(&configfile, &default_configfile)?;
+    check_config(&config);
 
-    if let Some(matches) = matches.subcommand_matches("configure") {
-        // printnanny::configure_prompts()
-    }
+    
 
     Ok(())
 }

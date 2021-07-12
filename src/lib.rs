@@ -19,12 +19,12 @@ impl ::std::default::Default for PrintNannyConfig {
 }
 
 #[derive(Debug, Snafu, PartialEq)]
-enum Error {
+pub enum Error {
     #[snafu(display("Received blank config value for key: {} config", key))]
     AuthRequired { key: String },
 }
 
-fn check_config(config: &PrintNannyConfig) ->  Result<(), Error> {
+pub fn check_config(config: &PrintNannyConfig) ->  Result<(), Error> {
     ensure!(!config.api_key.is_empty(), AuthRequired {
         key: "api_key".to_string()
     });
@@ -32,6 +32,14 @@ fn check_config(config: &PrintNannyConfig) ->  Result<(), Error> {
         key: "email".to_string()
     });
     Ok(())
+}
+
+pub fn load_config(configfile: &str, default_configfile: &str) -> Result<PrintNannyConfig, confy::ConfyError> {
+    if configfile == default_configfile {
+        return confy::load(configfile); // platform-specific default config path
+    } else {
+        return confy::load_path(configfile); // load full path instead
+    }
 }
 
 #[test]
