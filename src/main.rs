@@ -3,28 +3,11 @@ use std::fs::File;
 use anyhow::{ Context, Result };
 use log::{info, warn, error, debug, trace };
 use structopt::StructOpt;
-use serde::{Serialize, Deserialize};
+use printnanny::{ PrintNannyConfig };
 extern crate clap;
 use clap::{ Arg, App, SubCommand };
 extern crate confy;
 
-
-#[derive(Serialize, Deserialize)]
-struct PrintNannyConfig {
-    api_key: String,
-    api_url: String,
-    email: String
-}
-
-impl ::std::default::Default for PrintNannyConfig {
-    fn default() -> Self { Self { 
-        api_url: "https://www.print-nanny.com/api/".into(),
-        api_key: "".into(),
-        email: "".into()
-    }}
-}
-
-fn configure_prompts(){}
 
 fn main() -> Result<()> {
     env_logger::init();
@@ -55,7 +38,7 @@ fn main() -> Result<()> {
     }
 
     if let Some(matches) = matches.subcommand_matches("configure") {
-        configure_prompts()
+        // printnanny::configure_prompts()
     }
 
     Ok(())

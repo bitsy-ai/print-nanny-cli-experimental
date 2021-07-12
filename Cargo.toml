@@ -1,5 +1,5 @@
 [package]
-name = "print-nanny"
+name = "printnanny"
 version = "0.1.0"
 authors = ["Leigh Johnson <leigh@bitsy.ai>"]
 edition = "2018"
@@ -24,6 +24,7 @@ clap = "2"
 confy = "0.4"
 env_logger = "0.8"
 log = "0.4"
-print-nanny-client = "0.7"
+print-nanny-client = "0.8"
 serde = { version = "1.0", features = ["derive"] }
+snafu = "0.6.9"
 structopt = "0.3"

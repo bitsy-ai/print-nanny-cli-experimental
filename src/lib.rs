@@ -1,14 +1,54 @@
-// pub fn find_matches(content: &str, pattern: &str, mut writer: impl std::io::Write) {
-//     for line in content.lines() {
-//         if line.contains(pattern){
-//             writeln!(writer, "{}", line);
-//         }
-//     }  
-// }
 
-// #[test]
-// fn find_a_match(){
-//     let mut result: Vec<u8> = Vec::new();
-//     find_matches("lorem ipsum\ndolor sit amet", "lorem", &mut result);
-//     assert_eq!(result, b"lorem ipsum\n")
-// }
+use serde::{Serialize, Deserialize};
+use snafu::{ResultExt, Snafu, ensure };
+use anyhow::{Context, Result};
+
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
+pub struct PrintNannyConfig {
+    api_key: String,
+    api_url: String,
+    email: String
+}
+
+impl ::std::default::Default for PrintNannyConfig {
+    fn default() -> Self { Self { 
+        api_url: "https://www.print-nanny.com/api/".into(),
+        api_key: "".into(),
+        email: "".into()
+    }}
+}
+
+#[derive(Debug, Snafu, PartialEq)]
+enum Error {
+    #[snafu(display("Received blank config value for key: {} config", key))]
+    AuthRequired { key: String },
+}
+
+fn check_config(config: &PrintNannyConfig) ->  Result<(), Error> {
+    ensure!(!config.api_key.is_empty(), AuthRequired {
+        key: "api_key".to_string()
+    });
+    ensure!(!config.email.is_empty(), AuthRequired {
+        key: "email".to_string()
+    });
+    Ok(())
+}
+
+#[test]
+fn check_config_missing_api_key(){
+    let config = PrintNannyConfig{..PrintNannyConfig::default()};
+    let result = check_config(&config);
+    let expected = Err(Error::AuthRequired{
+        key: "api_key".to_string()
+    });
+    assert_eq!(result, expected);
+}
+#[test]
+fn check_config_missing_email(){
+    let config = PrintNannyConfig{api_key: "abc123".to_string(), ..PrintNannyConfig::default()};
+    let result = check_config(&config);
+    let expected = Err(Error::AuthRequired{
+        key: "email".to_string()
+    });
+    assert_eq!(result, expected);
+}
