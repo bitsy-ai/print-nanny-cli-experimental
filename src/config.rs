@@ -2,10 +2,12 @@
 use serde::{ Serialize, Deserialize };
 use snafu::{ ResultExt, Snafu, ensure };
 use anyhow::{ Context, Result };
-use print_nanny_client::models::email_auth_request::{ EmailAuthRequest };
-use print_nanny_client::apis::auth_api::{ auth_email_create, auth_verify_create };
-use print_nanny_client::apis::{ configuration};
+use futures::executor::block_on;
 
+use print_nanny_client::models::email_auth_request::{ EmailAuthRequest };
+use print_nanny_client::models::email_auth::{ EmailAuth };
+use print_nanny_client::apis::auth_api::{ auth_email_create, auth_verify_create, AuthEmailCreateError };
+use print_nanny_client::apis::Error as PrintNannyClientError;
 
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct PrintNannyConfig {
@@ -64,10 +66,11 @@ pub fn load_config(configfile: &str, default_configfile: &str) -> Result<PrintNa
     }
 }
 
-pub fn auth_send_verify_email(email: &str, config: &PrintNannyConfig) {
-    let auth_request = EmailAuthRequest{email:email.to_string()};
-    let api_config = configuration::Configuration{
+pub fn auth_send_verify_email(email: &str, config: &PrintNannyConfig) -> Result<EmailAuth, PrintNannyClientError<AuthEmailCreateError>>  {
+    let request = EmailAuthRequest{email:email.to_string()};
+    let api_config = print_nanny_client::apis::configuration::Configuration{
         base_path:config.api_url.to_string(), ..Default::default() 
     };
-
+    let future = auth_email_create(&api_config, request);
+    block_on(future)
 }
