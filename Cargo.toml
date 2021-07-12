@@ -1,5 +1,5 @@
 [package]
-name = "printnanny"
+name = "print-nanny-cli"
 version = "0.1.0"
 authors = ["Leigh Johnson <leigh@bitsy.ai>"]
 edition = "2018"
@@ -16,6 +16,7 @@ categories = ["command-line-utilities"]
 assert_cmd = "1"
 predicates = "2"
 tempfile = "3"
+httpmock = "0.5"
 
 [dependencies]
 anyhow = "1"
@@ -23,5 +24,6 @@ clap = "2"
 confy = "0.4"
 env_logger = "0.8"
 log = "0.4"
+print-nanny-client = "0.7"
 serde = { version = "1.0", features = ["derive"] }
 structopt = "0.3"
