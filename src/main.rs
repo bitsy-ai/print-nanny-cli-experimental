@@ -3,43 +3,46 @@ use std::fs::File;
 use anyhow::{ Context, Result };
 use log::{info, warn, error, debug, trace };
 use structopt::StructOpt;
-extern crate clap_verbosity_flag;
+use serde::{Serialize, Deserialize};
+extern crate clap;
+use clap::{ Arg, App, SubCommand };
+extern crate confy;
 
-#[derive(StructOpt)]
-struct Cli {
-    pattern: String,
-    #[structopt(parse(from_os_str))]
-    path: std::path::PathBuf,
 
-    // flags: -v (warnings) -vv (info) -vvv(debug) and -vvvv (trace)
-    #[structopt(flatten)]
-    verbose: clap_verbosity_flag::Verbosity
+#[derive(Serialize, Deserialize)]
+struct PrintNannyConfig {
+    api_key: String
 }
+
+impl ::std::default::Default for PrintNannyConfig {
+    fn default() -> Self { Self { api_key: "".into() }}
+}
+
+fn configure_prompts(){}
 
 fn main() -> Result<()> {
     env_logger::init();
 
-    // trace!("Example TRACE from Print Nanny");
-    // debug!("Example DEBUG from Print Nanny");
-    // info!("Example INFO from Print Nanny");
-    // warn!("Example WARNING from Print Nanny");
-    // error!("Example ERROR from Print Nanny");
-    let args = Cli::from_args();
-    
-    // TODO read from BufReader instead of loading entire file into memory
-    // let f = File::open(&args.path)?;
-    // let mut reader = BufReader::new(f);
-    // let mut line = String::new();
+    let matches = App::new("printnanny")
+        .version("0.1.0")
+        .author("Leigh Johnson <leigh@bitsy.ai>")
+        .about("Official Print Nanny CLI https://print-nanny.com")
+        .arg(Arg::with_name("config")
+            .short("c")
+            .long("config")
+            .help("Load custom config file")
+            .value_name("FILE")
+            .takes_value(true))
+        .subcommand(SubCommand::with_name("configure")
+            .about("Configure your Print Nanny account"))
+        .get_matches();
 
-    // for line in reader.lines() {
-    //     if line.contains(&args.pattern){
-    //         println!("{}", line);
-    //     }  
-    // }
-    let content = std::fs::read_to_string(&args.path)
-        .with_context(|| format!("could not read file `{}`", args.path.display()))?;
+    let config = matches.value_of("config").unwrap_or("default.conf");
+    info!("Using config file: {}", config);
 
+    if let Some(matches) = matches.subcommand_matches("configure") {
+        configure_prompts()
+    }
 
-    printnanny::find_matches(&content, &args.pattern, &mut std::io::stdout());
     Ok(())
 }
