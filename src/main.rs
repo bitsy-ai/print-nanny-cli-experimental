@@ -11,11 +11,17 @@ extern crate confy;
 
 #[derive(Serialize, Deserialize)]
 struct PrintNannyConfig {
-    api_key: String
+    api_key: String,
+    api_url: String,
+    email: String
 }
 
 impl ::std::default::Default for PrintNannyConfig {
-    fn default() -> Self { Self { api_key: "".into() }}
+    fn default() -> Self { Self { 
+        api_url: "https://www.print-nanny.com/api/".into(),
+        api_key: "".into(),
+        email: "".into()
+    }}
 }
 
 fn configure_prompts(){}
@@ -37,8 +43,16 @@ fn main() -> Result<()> {
             .about("Configure your Print Nanny account"))
         .get_matches();
 
-    let config = matches.value_of("config").unwrap_or("default.conf");
-    info!("Using config file: {}", config);
+
+    let default_configfile = "printnanny";
+    let configfile = matches.value_of("config").unwrap_or(default_configfile);
+    info!("Using config file: {}", configfile);
+
+    if configfile == default_configfile {
+        let config = confy::load(configfile)?; // platform-specific default config path
+    } else {
+        let config = confy::load_path(configfile)?; // load full path instead
+    }
 
     if let Some(matches) = matches.subcommand_matches("configure") {
         configure_prompts()
