@@ -19,6 +19,11 @@ fn main() -> Result<()> {
         .version("0.1.0")
         .author("Leigh Johnson <leigh@bitsy.ai>")
         .about("Official Print Nanny CLI https://print-nanny.com")
+        .arg(Arg::with_name("api-url")
+            .long("api-url")
+            .help("Specify api_url")
+            .value_name("API_URL")
+            .takes_value(true))
         .arg(Arg::with_name("config")
             .short("c")
             .long("config")
@@ -56,11 +61,17 @@ fn main() -> Result<()> {
         3 | _ => builder.filter_level(LevelFilter::Trace).init(),
     }
 
-    let config = load_config(&configfile, &default_configfile)?;
+    let mut config = load_config(&configfile, &default_configfile)?;
+
+    if let Some(api_url) = matches.value_of("api-url") {
+        config.api_url = api_url.to_string();
+        info!("Using api-url {}", config.api_url);
+    }
     if let Some(matches) = matches.subcommand_matches("auth") {
         let email = matches.value_of("email").unwrap();
         info!("Sending two-factor auth request for {}", email.to_string());
-        let verify_email_future = auth_send_verify_email(email, &config);
+        let verify_email_future = auth_send_verify_email(email, &config)?;
+        info!("Received response {}", verify_email_future.email.to_string());
 
     }
 

@@ -11,14 +11,14 @@ use print_nanny_client::apis::Error as PrintNannyClientError;
 
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct PrintNannyConfig {
-    api_token: String,
-    api_url: String,
-    email: String
+    pub api_token: String,
+    pub api_url: String,
+    pub email: String
 }
 
 impl ::std::default::Default for PrintNannyConfig {
     fn default() -> Self { Self { 
-        api_url: "https://www.print-nanny.com/".into(),
+        api_url: "https://www.print-nanny.com".into(),
         api_token: "".into(),
         email: "".into()
     }}
