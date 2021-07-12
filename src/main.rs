@@ -3,7 +3,7 @@ use std::fs::File;
 use anyhow::{ Context, Result };
 use log::{info, warn, error, debug, trace };
 use structopt::StructOpt;
-use printnanny::{ PrintNannyConfig, check_config, load_config };
+use printnanny::config::{ PrintNannyConfig, check_config, load_config };
 extern crate clap;
 use clap::{ Arg, App, SubCommand };
 extern crate confy;
