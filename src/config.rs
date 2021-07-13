@@ -7,8 +7,8 @@ use anyhow::{ Context, Result };
 use futures::executor::block_on;
 use dialoguer::Input;
 
-use print_nanny_client::models::{ CallbackTokenAuthRequest, EmailAuthRequest, DetailResponse };
-use print_nanny_client::apis::auth_api::{ auth_email_create, auth_token_create, auth_verify_create, AuthEmailCreateError, AuthTokenCreateError, AuthVerifyCreateError };
+use print_nanny_client::models::{ CallbackTokenAuthRequest, EmailAuthRequest, DetailResponse, TokenResponse };
+use print_nanny_client::apis::auth_api::{ auth_email_create, auth_token_create, AuthEmailCreateError, AuthVerifyCreateError };
 use print_nanny_client::apis::configuration::{ Configuration as PrintNannyAPIConfig };
 use print_nanny_client::apis::Error as PrintNannyClientError;
 
@@ -70,7 +70,7 @@ pub fn load_config(configfile: &str, default_configfile: &str) -> Result<PrintNa
 }
 
 pub fn prompt_token_input(email: &str) -> String {
-    let prompt = format!("Please enter the 6-digit code emailed to {}", email.to_string());
+    let prompt = format!("⚪ Please enter the 6-digit code emailed to {}", email.to_string());
     let input : String = Input::new()
         .with_prompt(prompt)
         .interact_text()
@@ -79,22 +79,37 @@ pub fn prompt_token_input(email: &str) -> String {
     return input;
 }
 
-async fn verify_2fa_send_email(email: &str, api_config: &PrintNannyAPIConfig) -> DetailResponse{
+async fn verify_2fa_send_email(api_config: &PrintNannyAPIConfig, email: &str) -> DetailResponse{
     let req =  EmailAuthRequest{email:email.to_string()};
     let res = auth_email_create(&api_config, req).await;
-
     let result = match res {
         Ok(result) => result,
-        Err(e) => panic!("FAILURE in print_nanny_client::apis::auth_email_create  {:?}", e),
+        Err(e) => panic!("🔴 Failed to end verification email {:?}", e),
     };
-    info!("SUCCESS auth_send_verify_email {:?}", serde_json::to_string(&result));
+    info!("SUCCESS auth_email_create detail {:?}", serde_json::to_string(&result));
+    result
+}
+
+async fn verify_2fa_code(api_config: &PrintNannyAPIConfig, token: String, email: &str) -> TokenResponse {
+    let req = CallbackTokenAuthRequest{mobile: None, token:token, email:Some(email.to_string())};
+    let res = auth_token_create(&api_config, req).await;
+    let result = match res {
+        Ok(result) => result,
+        Err(e) => panic!("🔴 Token verification failed {:?}", e)
+    };
+    info!("SUCCESS auth_verify_create detail {:?}", serde_json::to_string(&result));
     result
 }
 pub async fn verify_2fa_auth(email: &str, config: &PrintNannySystemConfig) {
     let api_config = print_nanny_client::apis::configuration::Configuration{
         base_path:config.api_url.to_string(), ..Default::default() 
     };
-    verify_2fa_send_email(email, &api_config);
-    // info!("SUCCESS auth_send_verify_email {}", serde_json::to_string(auth_res));
+    verify_2fa_send_email(&api_config, email).await;
+    println!("📥 Sent a 6-digit verification code to {}", email.to_string());
+
+    let otp_token = prompt_token_input(email);
+    let api_token = verify_2fa_code(&api_config, otp_token, email).await;
+    let verified = verify_api_token(&api_config, api_token, email).await;
+    println!("✅ Success! You are now verified {}", email.to_string());
 
 }
