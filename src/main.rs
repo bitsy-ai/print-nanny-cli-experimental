@@ -4,7 +4,7 @@ use anyhow::{ Context, Result };
 use log::{info, warn, error, debug, trace };
 use structopt::StructOpt;
 use printnanny::config::{ 
-    check_config, 
+    // check_config, 
     load_config, 
     verify_2fa_auth
 };
@@ -15,6 +15,7 @@ use log::LevelFilter;
 extern crate clap;
 use clap::{ Arg, App, SubCommand };
 extern crate confy;
+
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -52,7 +53,6 @@ async fn main() -> Result<()> {
             ))
         .get_matches();
 
-
     let default_configfile = "printnanny";
     let configfile = matches.value_of("config").unwrap_or(default_configfile);
     info!("Using config file: {}", configfile);
@@ -77,17 +77,12 @@ async fn main() -> Result<()> {
     if let Some(matches) = matches.subcommand_matches("auth") {
         let email = matches.value_of("email").unwrap();
         info!("Sending two-factor auth request for {}", email.to_string());
-        let verify_2fa_response = verify_2fa_auth(email, &config).await;
-        // match send_2fa_response {
-        //     Ok(v) => {
-        //         info!("SUCCESS auth_send_verify_email {}", serde_json::to_string(v));
-        //     }
-        //     Err(e) => {
-        //         error!("FAILURE auth_send_verify_email {}", e.to_string());
-        //     }
-        // };
-        // let token = prompt_token_input(&email);
-        // let verify_2fa_response = rt.block_on(verify_2fa_token(email, token, &config));
+        // let verify_2fa_response = verify_2fa_auth(email, &config).await;
+
+        if let Err(err) = verify_2fa_auth(email, &config).await {
+            eprintln!("Error: {:#?}", err);
+            std::process::exit(1);
+        }
     }
 
     
