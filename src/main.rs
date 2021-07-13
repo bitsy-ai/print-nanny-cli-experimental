@@ -3,43 +3,94 @@ use std::fs::File;
 use anyhow::{ Context, Result };
 use log::{info, warn, error, debug, trace };
 use structopt::StructOpt;
-extern crate clap_verbosity_flag;
+use printnanny::config::{ 
+    check_config, 
+    load_config, 
+    verify_2fa_auth
+};
 
-#[derive(StructOpt)]
-struct Cli {
-    pattern: String,
-    #[structopt(parse(from_os_str))]
-    path: std::path::PathBuf,
+use env_logger::Builder;
+use log::LevelFilter;
 
-    // flags: -v (warnings) -vv (info) -vvv(debug) and -vvvv (trace)
-    #[structopt(flatten)]
-    verbose: clap_verbosity_flag::Verbosity
-}
+extern crate clap;
+use clap::{ Arg, App, SubCommand };
+extern crate confy;
 
-fn main() -> Result<()> {
-    env_logger::init();
-
-    // trace!("Example TRACE from Print Nanny");
-    // debug!("Example DEBUG from Print Nanny");
-    // info!("Example INFO from Print Nanny");
-    // warn!("Example WARNING from Print Nanny");
-    // error!("Example ERROR from Print Nanny");
-    let args = Cli::from_args();
+#[tokio::main]
+async fn main() -> Result<()> {
+    let mut builder = Builder::new();
     
-    // TODO read from BufReader instead of loading entire file into memory
-    // let f = File::open(&args.path)?;
-    // let mut reader = BufReader::new(f);
-    // let mut line = String::new();
+    let matches = App::new("printnanny")
+        .version("0.1.0")
+        .author("Leigh Johnson <leigh@bitsy.ai>")
+        .about("Official Print Nanny CLI https://print-nanny.com")
+        .arg(Arg::with_name("api-url")
+            .long("api-url")
+            .help("Specify api_url")
+            .value_name("API_URL")
+            .takes_value(true))
+        .arg(Arg::with_name("config")
+            .short("c")
+            .long("config")
+            .help("Load custom config file")
+            .value_name("FILE")
+            .takes_value(true))
+        .arg(Arg::with_name("v")
+        .short("v")
+        .multiple(true)
+        .help("Sets the level of verbosity"))
+        .subcommand(SubCommand::with_name("configure")
+            .about("Update Print Nanny configuration"))
+        .subcommand(SubCommand::with_name("auth")
+            .about("Connect your Print Nanny account")
+            .arg(Arg::with_name("email")
+                .long("email")
+                .help("Enter the email associated with your Print Nanny account")
+                .value_name("EMAIL")
+                .takes_value(true)
+                .required(true)
+            ))
+        .get_matches();
 
-    // for line in reader.lines() {
-    //     if line.contains(&args.pattern){
-    //         println!("{}", line);
-    //     }  
-    // }
-    let content = std::fs::read_to_string(&args.path)
-        .with_context(|| format!("could not read file `{}`", args.path.display()))?;
 
+    let default_configfile = "printnanny";
+    let configfile = matches.value_of("config").unwrap_or(default_configfile);
+    info!("Using config file: {}", configfile);
 
-    printnanny::find_matches(&content, &args.pattern, &mut std::io::stdout());
+    // Vary the output based on how many times the user used the "verbose" flag
+    // (i.e. 'printnanny -v -v -v' or 'printnanny -vvv' vs 'printnanny -v'
+    match matches.occurrences_of("v") {
+        0 => builder.filter_level(LevelFilter::Warn).init(),
+        1 => builder.filter_level(LevelFilter::Info).init(),
+        2 => builder.filter_level(LevelFilter::Debug).init(),
+        3 | _ => builder.filter_level(LevelFilter::Trace).init(),
+    }
+
+    let mut config = load_config(&configfile, &default_configfile)?;
+
+    // let mut rt = tokio::runtime::Runtime::new().unwrap();
+
+    if let Some(api_url) = matches.value_of("api-url") {
+        config.api_url = api_url.to_string();
+        info!("Using api-url {}", config.api_url);
+    }
+    if let Some(matches) = matches.subcommand_matches("auth") {
+        let email = matches.value_of("email").unwrap();
+        info!("Sending two-factor auth request for {}", email.to_string());
+        let verify_2fa_response = verify_2fa_auth(email, &config).await;
+        // match send_2fa_response {
+        //     Ok(v) => {
+        //         info!("SUCCESS auth_send_verify_email {}", serde_json::to_string(v));
+        //     }
+        //     Err(e) => {
+        //         error!("FAILURE auth_send_verify_email {}", e.to_string());
+        //     }
+        // };
+        // let token = prompt_token_input(&email);
+        // let verify_2fa_response = rt.block_on(verify_2fa_token(email, token, &config));
+    }
+
+    
+
     Ok(())
 }
