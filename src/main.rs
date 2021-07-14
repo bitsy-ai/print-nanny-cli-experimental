@@ -59,13 +59,14 @@ async fn main() -> Result<()> {
 
     // Vary the output based on how many times the user used the "verbose" flag
     // (i.e. 'printnanny -v -v -v' or 'printnanny -vvv' vs 'printnanny -v'
-    match matches.occurrences_of("v") {
+    let verbosity = matches.occurrences_of("v");
+    match verbosity {
         0 => builder.filter_level(LevelFilter::Warn).init(),
         1 => builder.filter_level(LevelFilter::Info).init(),
         2 => builder.filter_level(LevelFilter::Debug).init(),
         3 | _ => builder.filter_level(LevelFilter::Trace).init(),
-    }
-
+    };
+    
     let mut config = load_config(&configfile, &default_configfile)?;
 
     // let mut rt = tokio::runtime::Runtime::new().unwrap();
@@ -80,7 +81,11 @@ async fn main() -> Result<()> {
         // let verify_2fa_response = verify_2fa_auth(email, &config).await;
 
         if let Err(err) = verify_2fa_auth(email, &config).await {
-            eprintln!("Error: {:#?}", err);
+            if verbosity > 0 {
+                eprintln!("Error: {:#?}", err);
+            } else {
+                eprintln!("Error: {:?}", err);    
+            }
             std::process::exit(1);
         }
     }

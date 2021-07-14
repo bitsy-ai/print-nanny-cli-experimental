@@ -94,31 +94,23 @@ async fn verify_2fa_send_email(api_config: &PrintNannyAPIConfig, email: &str) ->
     let req =  EmailAuthRequest{email:email.to_string()};
     let res = auth_email_create(&api_config, req).await
         .context(format!("🔴 Failed to send verification email to {}", email))?;
-    // let result = match res {
-    //     Ok(result) => result,
-    //     Err(e) => {
-    //         Error::PrintNannyAPIError{email: email.to_string()};
-    //     }
-    // };
     info!("SUCCESS auth_email_create detail {:?}", serde_json::to_string(&res));
     Ok(res)
 }
 
-// async fn verify_2fa_code(api_config: &PrintNannyAPIConfig, token: String, email: &str) -> Result<TokenResponse, Error> {
-//     let req = CallbackTokenAuthRequest{mobile: None, token:token, email:Some(email.to_string())};
-//     let res = auth_token_create(&api_config, req).await?;
-//     let result = match res {
-//         Ok(result) => result,
-//         Err(e) => Error::VerifySendError{email: email.to_string()};
-//     };
-//     info!("SUCCESS auth_verify_create detail {:?}", serde_json::to_string(&result));
-//     result
-// }
+async fn verify_2fa_code(api_config: &PrintNannyAPIConfig, token: String, email: &str) -> Result<TokenResponse> {
+    let req = CallbackTokenAuthRequest{mobile: None, token:token, email:Some(email.to_string())};
+    let res = auth_token_create(&api_config, req).await
+        .context(format!("🔴 Verification failed. Please try again or contact leigh@print-nanny.com for help."))?;
+    info!("SUCCESS auth_verify_create detail {:?}", serde_json::to_string(&res));
+    Ok(res)
+}
+
 pub async fn verify_2fa_auth(email: &str, config: &PrintNannySystemConfig) -> Result<()> {
     let api_config = print_nanny_client::apis::configuration::Configuration{
         base_path:config.api_url.to_string(), ..Default::default() 
     };
-    verify_2fa_send_email(&api_config, email).await;
+    verify_2fa_send_email(&api_config, email).await?;
     println!("📥 Sent a 6-digit verification code to {}", email.to_string());
 
     let otp_token = prompt_token_input(email);
