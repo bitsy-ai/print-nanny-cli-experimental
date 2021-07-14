@@ -6,8 +6,15 @@ use futures::executor::block_on;
 use dialoguer::Input;
 use anyhow::{ Context, Result };
 
-use print_nanny_client::models::{ CallbackTokenAuthRequest, EmailAuthRequest, DetailResponse, TokenResponse };
-use print_nanny_client::apis::auth_api::{ auth_email_create, auth_token_create, AuthEmailCreateError, AuthVerifyCreateError };
+use print_nanny_client::models::{ 
+    CallbackTokenAuthRequest,
+    DetailResponse,
+    EmailAuthRequest, 
+    OctoPrintDevice
+    OctoPrintDeviceRequest,
+    TokenResponse,
+};
+use print_nanny_client::apis::auth_api::{ auth_email_create, auth_token_create, auth_verify_create };
 use print_nanny_client::apis::configuration::{ Configuration as PrintNannyAPIConfig };
 // use print_nanny_client::apis::{ Error as PrintNannyClientError, ResponseContent };
 
@@ -90,7 +97,9 @@ pub fn prompt_token_input(email: &str) -> String {
     return input;
 }
 
+
 async fn verify_2fa_send_email(api_config: &PrintNannyAPIConfig, email: &str) -> Result<DetailResponse> {
+    // Sends an email containing an expiring one-time password (6 digits)
     let req =  EmailAuthRequest{email:email.to_string()};
     let res = auth_email_create(&api_config, req).await
         .context(format!("🔴 Failed to send verification email to {}", email))?;
@@ -99,6 +108,7 @@ async fn verify_2fa_send_email(api_config: &PrintNannyAPIConfig, email: &str) ->
 }
 
 async fn verify_2fa_code(api_config: &PrintNannyAPIConfig, token: String, email: &str) -> Result<TokenResponse> {
+    // Verifies email and one-time password (6 digit pair), returning a Bearer token if verification succeeds
     let req = CallbackTokenAuthRequest{mobile: None, token:token, email:Some(email.to_string())};
     let res = auth_token_create(&api_config, req).await
         .context(format!("🔴 Verification failed. Please try again or contact leigh@print-nanny.com for help."))?;
@@ -106,16 +116,25 @@ async fn verify_2fa_code(api_config: &PrintNannyAPIConfig, token: String, email:
     Ok(res)
 }
 
+async fn register_device(api_config: &PrintNannyAPIConfig) -> Result<OctoPrintDevice> {
+
+    let cpuinfo = cpuid::identify()?;
+
+    let req = OctoPrintDeviceRequest{};
+}
+
 pub async fn verify_2fa_auth(email: &str, config: &PrintNannySystemConfig) -> Result<()> {
-    let api_config = print_nanny_client::apis::configuration::Configuration{
+    let mut api_config = print_nanny_client::apis::configuration::Configuration{
         base_path:config.api_url.to_string(), ..Default::default() 
     };
     verify_2fa_send_email(&api_config, email).await?;
     println!("📥 Sent a 6-digit verification code to {}", email.to_string());
 
     let otp_token = prompt_token_input(email);
-    // let api_token = verify_2fa_code(&api_config, otp_token, email).await;
     // let verified = verify_api_token(&api_config, api_token, email).await;
-    println!("✅ Success! You are now verified {}", email.to_string());
+    println!("✅ Success! Your email was verified {}", email.to_string());
+    println!("⏳ Registering your device. Please wait for completion.");
+    let api_token = verify_2fa_code(&api_config, otp_token, email).await?;
+
     Ok(())
 }
