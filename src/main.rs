@@ -38,8 +38,8 @@ async fn main() -> Result<()> {
         .short("v")
         .multiple(true)
         .help("Sets the level of verbosity"))
-        .subcommand(SubCommand::with_name("configure")
-            .about("Update Print Nanny configuration"))
+        .subcommand(SubCommand::with_name("config")
+            .about("Show current Print Nanny configuration"))
         .subcommand(SubCommand::with_name("auth")
             .about("Connect your Print Nanny account")
             .arg(Arg::with_name("email")
@@ -66,9 +66,6 @@ async fn main() -> Result<()> {
     };
     
     let mut config = load_config(&configfile, &default_configfile)?;
-
-    // let mut rt = tokio::runtime::Runtime::new().unwrap();
-
     if let Some(api_url) = matches.value_of("api-url") {
         config.api_url = api_url.to_string();
         info!("Using api-url {}", config.api_url);

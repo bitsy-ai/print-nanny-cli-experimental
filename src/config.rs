@@ -1,5 +1,13 @@
 extern crate confy;
 use serde::{ Serialize, Deserialize };
+use thiserror::Error;
+use anyhow::{ Context, Result };
+
+#[derive(Error, Debug, PartialEq)]
+pub enum ConfigError {
+    #[error("Missing attribute: {0}")]
+    MissingAttribute(String),
+}
 
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct PrintNannySystemConfig {
@@ -15,34 +23,30 @@ impl ::std::default::Default for PrintNannySystemConfig {
     }}
 }
 
-// pub fn check_config(config: &PrintNannySystemConfig) ->  Result<()> {
-//     ensure!(!config.api_token.is_empty(), Error::BlankConfigValue {
-//         key: "api_token".to_string()
-//     });
-//     ensure!(!config.email.is_empty(), Error::BlankConfigValue {
-//         key: "email".to_string()
-//     });
-//     Ok(())
-// }
+pub fn check_config(config: &PrintNannySystemConfig) ->  Result<(), ConfigError> {
+    if config.api_token.is_empty() {
+       Err(ConfigError::MissingAttribute("api_token".to_string()))
+    } else if config.email.is_empty() {
+        Err(ConfigError::MissingAttribute("email".to_string()))
+    }else {
+        Ok(())
+    }
+}
 
-// #[test]
-// fn check_config_missing_api_token(){
-//     let config = PrintNannySystemConfig{..PrintNannySystemConfig::default()};
-//     let result = check_config(&config);
-//     let expected = Err(Error::BlankConfigValue{
-//         key: "api_token".to_string()
-//     });
-//     assert_eq!(result, expected);
-// }
-// #[test]
-// fn check_config_missing_email(){
-//     let config = PrintNannySystemConfig{api_token: "abc123".to_string(), ..PrintNannySystemConfig::default()};
-//     let result = check_config(&config);
-//     let expected = Err(Error::BlankConfigValue{
-//         key: "email".to_string()
-//     });
-//     assert_eq!(result, expected);
-// }
+#[test]
+fn check_config_missing_api_token(){
+    let config = PrintNannySystemConfig{..PrintNannySystemConfig::default()};
+    let result = check_config(&config);
+    let expected = Err(ConfigError::MissingAttribute("api_token".to_string()));
+    assert_eq!(result, expected);
+}
+#[test]
+fn check_config_missing_email(){
+    let config = PrintNannySystemConfig{api_token: "abc123".to_string(), ..PrintNannySystemConfig::default()};
+    let result = check_config(&config);
+    let expected = Err(ConfigError::MissingAttribute("email".to_string()));
+    assert_eq!(result, expected);
+}
 
 pub fn load_config(configfile: &str, default_configfile: &str) -> Result<PrintNannySystemConfig, confy::ConfyError> {
     if configfile == default_configfile {
