@@ -16,24 +16,6 @@ use print_nanny_client::models::{
 };
 use print_nanny_client::apis::auth_api::{ auth_email_create, auth_token_create, auth_verify_create };
 use print_nanny_client::apis::configuration::{ Configuration as PrintNannyAPIConfig };
-// use print_nanny_client::apis::{ Error as PrintNannyClientError, ResponseContent };
-
-
-// https://github.com/shepmaster/snafu/issues/199
-
-// #[derive(Debug, Snafu, PartialEq)]
-// pub enum Error {
-//     #[snafu(display("🔴 Received blank config value for key: {} config", key))]
-//     BlankConfigValue { key: String },
-//     #[snafu(display("🔴 Failed to send verification email to {} {:?}", email, source))]
-//     PrintNannyAPIError { 
-//         email: String, 
-//         source: print_nanny_client::apis::Error
-//     },
-// }
-
-// type Result<T, E = Error> = std::result::Result<T, E>;
-
 
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct PrintNannySystemConfig {
