@@ -14,7 +14,7 @@ use print_nanny_client::models::{
 };
 use print_nanny_client::apis::auth_api::{ auth_email_create, auth_token_create, auth_verify_create };
 use print_nanny_client::apis::configuration::{ Configuration as PrintNannyAPIConfig };
-use crate::config::PrintNannySystemConfig;
+use crate::config::{ PrintNannySystemConfig };
 
 pub fn prompt_token_input(email: &str) -> String {
     let prompt = format!("⚪ Please enter the 6-digit code emailed to {}", email.to_string());

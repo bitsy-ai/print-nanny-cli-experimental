@@ -15,6 +15,7 @@ pub struct PrintNannySystemConfig {
     pub api_url: String,
     pub email: String
 }
+
 impl ::std::default::Default for PrintNannySystemConfig {
     fn default() -> Self { Self { 
         api_url: "https://www.print-nanny.com".into(),
@@ -54,4 +55,9 @@ pub fn load_config(configfile: &str, default_configfile: &str) -> Result<PrintNa
     } else {
         return confy::load_path(configfile); // load full path instead
     }
+}
+
+pub fn print_config(config: &PrintNannySystemConfig) {
+    println!("💜 Your current config:");
+    println!("{:#?}", config);
 }

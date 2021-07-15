@@ -4,7 +4,8 @@ use anyhow::{ Context, Result };
 use log::{info, warn, error, debug, trace };
 use structopt::StructOpt;
 use printnanny::config::{ 
-    load_config, 
+    load_config,
+    print_config
 };
 use env_logger::Builder;
 use log::LevelFilter;
@@ -84,8 +85,7 @@ async fn main() -> Result<()> {
             std::process::exit(1);
         };
     } else if let Some(matches) = matches.subcommand_matches("config") {
-        println!("💜 Your current config:");
-        println!("{:#?}", config)
+        print_config(&config);
     }
     Ok(())
 }
