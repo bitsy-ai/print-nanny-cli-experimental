@@ -117,6 +117,8 @@ pub async fn verify_2fa_auth(email: &str, config: &PrintNannySystemConfig) -> Re
     println!("✅ Success! Your email was verified {}", email.to_string());
     println!("⏳ Registering your device. Please wait for completion.");
     let api_token = verify_2fa_code(&api_config, otp_token, email).await?;
-
+    config.email = email.to_string();
+    config.api_token = api_token;
+    confy::store("printnanny", config)?;
     Ok(())
 }
