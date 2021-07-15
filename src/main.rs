@@ -4,13 +4,11 @@ use anyhow::{ Context, Result };
 use log::{info, warn, error, debug, trace };
 use structopt::StructOpt;
 use printnanny::config::{ 
-    // check_config, 
     load_config, 
-    verify_2fa_auth
 };
-
 use env_logger::Builder;
 use log::LevelFilter;
+use printnanny::auth::{ auth };
 
 extern crate clap;
 use clap::{ Arg, App, SubCommand };
@@ -77,10 +75,7 @@ async fn main() -> Result<()> {
     }
     if let Some(matches) = matches.subcommand_matches("auth") {
         let email = matches.value_of("email").unwrap();
-        info!("Sending two-factor auth request for {}", email.to_string());
-        // let verify_2fa_response = verify_2fa_auth(email, &config).await;
-
-        if let Err(err) = verify_2fa_auth(email, &config).await {
+        if let Err(err) = auth(email, &mut config).await {
             if verbosity > 0 {
                 eprintln!("Error: {:#?}", err);
             } else {
@@ -89,8 +84,5 @@ async fn main() -> Result<()> {
             std::process::exit(1);
         }
     }
-
-    
-
     Ok(())
 }
