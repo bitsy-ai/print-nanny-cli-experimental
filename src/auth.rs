@@ -45,24 +45,23 @@ async fn verify_2fa_code(api_config: &PrintNannyAPIConfig, token: String, email:
     Ok(res)
 }
 
-pub async fn verify_2fa_auth(email: &str, config: &PrintNannySystemConfig) -> Result<TokenResponse> {
+pub async fn verify_2fa_auth(config: &PrintNannySystemConfig) -> Result<TokenResponse> {
     let mut api_config = print_nanny_client::apis::configuration::Configuration{
         base_path:config.api_url.to_string(), ..Default::default() 
     };
-    verify_2fa_send_email(&api_config, email).await?;
-    println!("📥 Sent a 6-digit verification code to {}", email.to_string());
+    verify_2fa_send_email(&api_config, &config.email).await?;
+    println!("📥 Sent a 6-digit verification code to {}", config.email);
 
-    let otp_token = prompt_token_input(email);
+    let otp_token = prompt_token_input(&config.email);
     // let verified = verify_api_token(&api_config, api_token, email).await;
-    println!("✅ Success! Your email was verified {}", email.to_string());
+    println!("✅ Success! Your email was verified {}", config.email);
     println!("⏳ Registering your device. Please wait for completion.");
-    let api_token = verify_2fa_code(&api_config, otp_token, email).await?;
+    let api_token = verify_2fa_code(&api_config, otp_token, &config.email).await?;
     Ok(api_token)
 }
 
-pub async fn auth(email: &str, config: &mut PrintNannySystemConfig) -> Result<()> {
-    let res = verify_2fa_auth(email, &config).await?;
-    config.email = email.to_string();
+pub async fn auth(config: &mut PrintNannySystemConfig) -> Result<()> {
+    let res = verify_2fa_auth(&config).await?;
     config.api_token = res.token;
     confy::store("printnanny", config)?;
     Ok(())

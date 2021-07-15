@@ -70,16 +70,19 @@ async fn main() -> Result<()> {
         config.api_url = api_url.to_string();
         info!("Using api-url {}", config.api_url);
     }
+    if let Some(email) = matches.value_of("email"){
+        config.email = email.to_string();
+    }
+
     if let Some(matches) = matches.subcommand_matches("auth") {
-        let email = matches.value_of("email").unwrap();
-        if let Err(err) = auth(email, &mut config).await {
+        if let Err(err) = auth(&mut config).await {
             if verbosity > 0 {
                 eprintln!("Error: {:#?}", err);
             } else {
                 eprintln!("Error: {:?}", err);    
             }
             std::process::exit(1);
-        }
-    }
+        };
+    };
     Ok(())
 }
