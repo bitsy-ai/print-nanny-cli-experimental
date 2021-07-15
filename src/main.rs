@@ -83,6 +83,9 @@ async fn main() -> Result<()> {
             }
             std::process::exit(1);
         };
-    };
+    } else if let Some(matches) = matches.subcommand_matches("config") {
+        println!("💜 Your current config:");
+        println!("{:#?}", config)
+    }
     Ok(())
 }
