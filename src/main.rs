@@ -39,8 +39,6 @@ async fn main() -> Result<()> {
         .short("v")
         .multiple(true)
         .help("Sets the level of verbosity"))
-        .subcommand(SubCommand::with_name("config")
-            .about("Show current Print Nanny configuration"))
         .subcommand(SubCommand::with_name("auth")
             .about("Connect your Print Nanny account")
             .arg(Arg::with_name("email")
@@ -50,6 +48,8 @@ async fn main() -> Result<()> {
                 .takes_value(true)
                 .required(true)
             ))
+        .subcommand(SubCommand::with_name("config")
+            .about("Show current Print Nanny configuration"))
         .get_matches();
 
     let default_configfile = "printnanny";

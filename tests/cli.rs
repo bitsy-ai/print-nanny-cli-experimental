@@ -19,7 +19,7 @@ use printnanny::config::{ print_config, PrintNannySystemConfig };
 
 #[cfg(target_arch="x86_64")]
 #[test]
-fn print_config() -> Result<(), Box<dyn std::error::Error>> {
+fn test_print_config() -> Result<(), Box<dyn std::error::Error>> {
     let config = PrintNannySystemConfig::default();
     let expected = print_config(&config);
     let mut cmd = Command::cargo_bin("printnanny")?;
