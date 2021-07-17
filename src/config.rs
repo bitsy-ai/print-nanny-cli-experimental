@@ -1,8 +1,10 @@
 extern crate confy;
 use serde::{ Serialize, Deserialize };
 use thiserror::Error;
-use anyhow::{ Context, Result };
-
+use anyhow::{ Result };
+use print_nanny_client::models::{ 
+    DeviceIdentity
+};
 #[derive(Error, Debug, PartialEq)]
 pub enum ConfigError {
     #[error("Missing attribute: {0}")]
@@ -13,14 +15,16 @@ pub enum ConfigError {
 pub struct PrintNannySystemConfig {
     pub api_token: String,
     pub api_url: String,
-    pub email: String
+    pub email: String,
+    pub device_identity: Option<DeviceIdentity>
 }
 
 impl ::std::default::Default for PrintNannySystemConfig {
     fn default() -> Self { Self { 
         api_url: "https://www.print-nanny.com".into(),
         api_token: "".into(),
-        email: "".into()
+        email: "".into(),
+        device_identity: None
     }}
 }
 

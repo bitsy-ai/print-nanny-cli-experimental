@@ -1,5 +1,5 @@
 use anyhow::{ Result };
-use log::{info, warn, error, debug, trace };
+use log::{info };
 use printnanny::config::{ 
     load_config,
     print_config
@@ -68,11 +68,11 @@ async fn main() -> Result<()> {
         config.api_url = api_url.to_string();
         info!("Using api-url {}", config.api_url);
     }
-    if let Some(email) = matches.value_of("email"){
-        config.email = email.to_string();
-    }
 
-    if let Some(_matches) = matches.subcommand_matches("auth") {
+    if let Some(matches) = matches.subcommand_matches("auth") {
+        if let Some(email) = matches.value_of("email"){
+            config.email = email.to_string();
+        }
         if let Err(err) = auth(&mut config).await {
             if verbosity > 0 {
                 eprintln!("Error: {:#?}", err);

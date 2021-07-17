@@ -1,5 +1,5 @@
 use std::fs;
-use anyhow::{ Context, Result };
+use anyhow::{ Result };
 
 use printnanny::cpuinfo::{ CpuInfo };
 
@@ -15,10 +15,10 @@ fn test_rpi_cpuinfo() -> Result<()> {
     // let expected_model = "Raspberry Pi 4 Model B Rev 1.1";
     match cpuinfo.extra {
         Some(x) => {
-            assert!(x["Hardware"] == "BCM2711");
-            assert!(x["Model"] == "Raspberry Pi 4 Model B Rev 1.1");
-            assert!(x["Revision"] == "c03111");
-            assert!(x["Serial"] == "100000003fa9a39b");
+            assert!(x["hardware"] == "BCM2711");
+            assert!(x["model"] == "Raspberry Pi 4 Model B Rev 1.1");
+            assert!(x["revision"] == "c03111");
+            assert!(x["serial"] == "100000003fa9a39b");
         },
         None => {}
     };
