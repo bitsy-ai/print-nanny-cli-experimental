@@ -77,7 +77,7 @@ impl CpuInfo {
     }
 
     fn parse_blocks(data: &str) -> Vec<HashMap<String, String>> {
-        data.split("\n\n")
+        data.trim().split("\n\n")
             .map(|block| 
                 block.trim()
                     .split("\n")
