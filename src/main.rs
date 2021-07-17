@@ -1,5 +1,5 @@
 use anyhow::{ Result };
-use log::{info, warn, error, debug, trace };
+use log::{info };
 use printnanny::config::{ 
     load_config,
     print_config

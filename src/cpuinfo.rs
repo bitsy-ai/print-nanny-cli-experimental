@@ -1,6 +1,6 @@
 use std::fs;
 use std::collections::{ HashMap };
-use anyhow::{ Context, Result };
+use anyhow::{ Result };
 
 #[derive(Debug, Clone)]
 pub struct CpuInfo {

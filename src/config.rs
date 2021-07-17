@@ -1,7 +1,7 @@
 extern crate confy;
 use serde::{ Serialize, Deserialize };
 use thiserror::Error;
-use anyhow::{ Context, Result };
+use anyhow::{ Result };
 
 #[derive(Error, Debug, PartialEq)]
 pub enum ConfigError {

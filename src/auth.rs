@@ -1,8 +1,5 @@
 
-use log::{info, warn, error, debug, trace };
-
-use serde::{ Serialize, Deserialize };
-use futures::executor::block_on;
+use log::{info };
 use anyhow::{ Context, Result };
 
 use print_nanny_client::models::{ 
@@ -30,7 +27,7 @@ async fn verify_2fa_code(api_config: &PrintNannyAPIConfig, token: String, email:
     // Verifies email and one-time password (6 digit pair), returning a Bearer token if verification succeeds
     let req = CallbackTokenAuthRequest{mobile: None, token:token, email:Some(email.to_string())};
     let res = auth_token_create(&api_config, req).await
-        .context(format!("🔴 Verification failed. Please try again or contact leigh@print-nanny.com for help."))?;
+        .context("🔴 Verification failed. Please try again or contact leigh@print-nanny.com for help.")?;
     info!("SUCCESS auth_verify_create detail {:?}", serde_json::to_string(&res));
     Ok(res)
 }

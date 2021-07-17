@@ -1,7 +1,7 @@
 
 use sysinfo::{ProcessExt, SystemExt};
 use procfs::{ CpuInfo };
-use anyhow::{ Context, Result };
+use anyhow::{ Result };
 use print_nanny_client::models::{ 
     DeviceIdentity,
     DeviceRequest

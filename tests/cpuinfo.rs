@@ -1,5 +1,5 @@
 use std::fs;
-use anyhow::{ Context, Result };
+use anyhow::{ Result };
 
 use printnanny::cpuinfo::{ CpuInfo };
 
