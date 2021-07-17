@@ -2,7 +2,6 @@ use std::fs;
 use std::collections::{ HashMap };
 use std::convert::TryFrom;
 use anyhow::{ Result, anyhow};
-use std::collections::hash_map::Entry;
 #[derive(Debug, Clone)]
 pub struct CpuInfo {
    pub processors: Vec<HashMap<String, String>>, // Vec of parsed processor blocks

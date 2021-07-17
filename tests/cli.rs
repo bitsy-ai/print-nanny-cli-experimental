@@ -1,7 +1,6 @@
 // use assert_cmd::prelude::*; // cli initializations and assertions based around Command
 // use predicates::prelude::*; // used for writing assertion statements (AKA predicates)
 use assert_cmd::Command;
-use printnanny::config::{ print_config, PrintNannySystemConfig };
 
 // #[cfg(target_arch="x86_64")]
 // #[test]

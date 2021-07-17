@@ -1,7 +1,6 @@
-
-use sysinfo::{ProcessExt, SystemExt};
+use sysinfo::{SystemExt};
 use std::convert::TryFrom;
-use anyhow::{ Result };
+use anyhow::{ Context, Result };
 use print_nanny_client::models::{ 
     DeviceIdentity,
     DeviceRequest
@@ -15,7 +14,7 @@ use crate::cpuinfo::{ CpuInfo };
 // https://docs.rs/sysinfo/0.19.2/sysinfo/struct.Component.html
 // https://www.kernel.org/doc/Documentation/hwmon/sysfs-interface
 
-pub async fn device_identity_update_or_create(config: &PrintNannySystemConfig, name: &str) -> Result<()> {
+pub async fn device_identity_update_or_create(config: &PrintNannySystemConfig, name: &str) -> Result<DeviceIdentity> {
     let api_config = print_nanny_client::apis::configuration::Configuration{
         base_path:config.api_url.to_string(),
         bearer_access_token:Some(config.api_token.clone()),
@@ -51,5 +50,7 @@ pub async fn device_identity_update_or_create(config: &PrintNannySystemConfig, n
         model,
         revision
     };
-    Ok(())
+    let res = devices_update_or_create(&api_config, req).await
+        .context("🔴 devices_update_or_create request failed")?;
+    Ok(res)
 }
