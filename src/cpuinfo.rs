@@ -1,6 +1,8 @@
 use std::fs;
 use std::collections::{ HashMap };
+use std::convert::TryFrom;
 use anyhow::{ Result, anyhow};
+use std::collections::hash_map::Entry;
 #[derive(Debug, Clone)]
 pub struct CpuInfo {
    pub processors: Vec<HashMap<String, String>>, // Vec of parsed processor blocks
@@ -16,6 +18,37 @@ impl CpuInfo {
             Ok(&cpu0["flags"])
         } else {
             Err(anyhow!("Failed to parse cpu flags from cpu0 block {:?}", cpu0))
+        }
+    }
+
+    pub fn cores(&self) -> Option<i32> {
+        i32::try_from(self.processors.len()).ok()
+    }
+
+    pub fn rpi_hardware(&self) -> String {
+        match &self.extra {
+            Some(v) => v.get("hardware").unwrap().to_string(),
+            None => "Raspberry Pi hardware not detected".to_string(),
+        }
+    }
+
+    pub fn rpi_model(&self) -> String {
+        match &self.extra {
+            Some(v) => v.get("model").unwrap().to_string(),
+            None => "Raspberry Pi model not detected".to_string(),
+        }
+    }
+    pub fn rpi_revision(&self) -> String {
+        match &self.extra {
+            Some(v) => v.get("revision").unwrap().to_string(),
+            None => "Raspberry Pi revision not detected".to_string(),
+        }
+    }
+
+    pub fn rpi_serial(&self) -> String {
+        match &self.extra {
+            Some(v) => v.get("serial").unwrap().to_string(),
+            None => "Raspberry Pi serial not detected".to_string(),
         }
     }
 

@@ -1,5 +1,6 @@
 
 use sysinfo::{ProcessExt, SystemExt};
+use std::convert::TryFrom;
 use anyhow::{ Result };
 use print_nanny_client::models::{ 
     DeviceIdentity,
@@ -23,20 +24,32 @@ pub async fn device_identity_update_or_create(config: &PrintNannySystemConfig, n
     let mut system = sysinfo::System::new_all();
     system.refresh_all();
 
-    let os_version = system.os_version();
-    let os = system.long_os_version();
-    let kernel_version = system.kernel_version();
-    let ram = system.total_memory();
-    let cores = system.physical_core_count().unwrap();
-    let cpuinfo = CpuInfo::new();
-
-    // let req = DeviceRequest{
-    //     name,
-    //     os_version,
-    //     os,
-    //     kernel_version,
-    //     ram,
-    //     cores
-    // };
+    let os_version = system.os_version().unwrap();
+    let os = system.long_os_version().unwrap();
+    let kernel_version = system.kernel_version().unwrap();
+    let ram = i64::try_from(system.total_memory())?;
+    
+    // /proc/cpuinfo
+    let cpuinfo = CpuInfo::new()?;
+    let cores = cpuinfo.cores().unwrap();
+    let cpu_flags = cpuinfo.cpu_flags()?.to_string();
+    let hardware = cpuinfo.rpi_hardware();
+    let model = cpuinfo.rpi_model();
+    let serial = cpuinfo.rpi_serial();
+    let revision = cpuinfo.rpi_revision();
+    
+    let req = DeviceRequest{
+        name:name.to_string(),
+        os_version,
+        os,
+        kernel_version,
+        ram,
+        cores,
+        cpu_flags,
+        hardware,
+        serial,
+        model,
+        revision
+    };
     Ok(())
 }
