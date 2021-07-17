@@ -1,16 +1,12 @@
-use std::io::BufReader;
-use std::fs::File;
-use anyhow::{ Context, Result };
+use anyhow::{ Result };
 use log::{info, warn, error, debug, trace };
-use structopt::StructOpt;
 use printnanny::config::{ 
-    // check_config, 
-    load_config, 
-    verify_2fa_auth
+    load_config,
+    print_config
 };
-
 use env_logger::Builder;
 use log::LevelFilter;
+use printnanny::auth::{ auth };
 
 extern crate clap;
 use clap::{ Arg, App, SubCommand };
@@ -40,8 +36,6 @@ async fn main() -> Result<()> {
         .short("v")
         .multiple(true)
         .help("Sets the level of verbosity"))
-        .subcommand(SubCommand::with_name("configure")
-            .about("Update Print Nanny configuration"))
         .subcommand(SubCommand::with_name("auth")
             .about("Connect your Print Nanny account")
             .arg(Arg::with_name("email")
@@ -51,6 +45,8 @@ async fn main() -> Result<()> {
                 .takes_value(true)
                 .required(true)
             ))
+        .subcommand(SubCommand::with_name("config")
+            .about("Show current Print Nanny configuration"))
         .get_matches();
 
     let default_configfile = "printnanny";
@@ -68,29 +64,25 @@ async fn main() -> Result<()> {
     };
     
     let mut config = load_config(&configfile, &default_configfile)?;
-
-    // let mut rt = tokio::runtime::Runtime::new().unwrap();
-
     if let Some(api_url) = matches.value_of("api-url") {
         config.api_url = api_url.to_string();
         info!("Using api-url {}", config.api_url);
     }
-    if let Some(matches) = matches.subcommand_matches("auth") {
-        let email = matches.value_of("email").unwrap();
-        info!("Sending two-factor auth request for {}", email.to_string());
-        // let verify_2fa_response = verify_2fa_auth(email, &config).await;
+    if let Some(email) = matches.value_of("email"){
+        config.email = email.to_string();
+    }
 
-        if let Err(err) = verify_2fa_auth(email, &config).await {
+    if let Some(_matches) = matches.subcommand_matches("auth") {
+        if let Err(err) = auth(&mut config).await {
             if verbosity > 0 {
                 eprintln!("Error: {:#?}", err);
             } else {
                 eprintln!("Error: {:?}", err);    
             }
             std::process::exit(1);
-        }
+        };
+    } else if let Some(_matches) = matches.subcommand_matches("config") {
+        print_config(&config);
     }
-
-    
-
     Ok(())
 }

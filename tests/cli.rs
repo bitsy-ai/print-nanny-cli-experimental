@@ -3,6 +3,7 @@ use predicates::prelude::*; // used for writing assertion statements (AKA predic
 use assert_cmd::Command;
 use tempfile::NamedTempFile;
 use std::io::Write;
+use printnanny::config::{ print_config, PrintNannySystemConfig };
 
 // #[cfg(target_arch="x86_64")]
 // #[test]
@@ -16,17 +17,15 @@ use std::io::Write;
 //     Ok(())
 // }
 
-// #[cfg(target_arch="x86_64")]
-// #[test]
-// fn find_content_in_file() -> Result<(), Box<dyn std::error::Error>> {
-//     let mut file = NamedTempFile::new()?;
-//     writeln!(file, "A test\nMore content\nLorem ipsum\nAnother test")?;
-
-//     let mut cmd = Command::cargo_bin("printnanny")?;
-//     cmd.arg("test").arg(&file.path());
-//     cmd.assert()
-//         .success()
-//         .stdout(predicate::str::contains("test\nAnother test"));
-//     Ok(())
-
-// }
+#[cfg(target_arch="x86_64")]
+#[test]
+fn test_print_config() -> Result<(), Box<dyn std::error::Error>> {
+    let config = PrintNannySystemConfig::default();
+    let expected = print_config(&config);
+    let mut cmd = Command::cargo_bin("printnanny")?;
+    cmd.arg("config");
+    cmd.assert()
+        .success();
+        // .stdout(expected);
+    Ok(())
+}
