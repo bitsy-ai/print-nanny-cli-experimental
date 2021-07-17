@@ -1,6 +1,5 @@
 
 use sysinfo::{ProcessExt, SystemExt};
-use procfs::{ CpuInfo };
 use anyhow::{ Result };
 use print_nanny_client::models::{ 
     DeviceIdentity,
@@ -8,12 +7,12 @@ use print_nanny_client::models::{
 };
 use print_nanny_client::apis::devices_api::{ devices_update_or_create };
 use crate::config::{ PrintNannySystemConfig };
+use crate::cpuinfo::{ CpuInfo };
 
 // TODO
 // Component struct implements sysfs-interface
 // https://docs.rs/sysinfo/0.19.2/sysinfo/struct.Component.html
 // https://www.kernel.org/doc/Documentation/hwmon/sysfs-interface
-
 
 pub async fn device_identity_update_or_create(config: &PrintNannySystemConfig, name: &str) -> Result<()> {
     let api_config = print_nanny_client::apis::configuration::Configuration{
@@ -23,8 +22,6 @@ pub async fn device_identity_update_or_create(config: &PrintNannySystemConfig, n
     };
     let mut system = sysinfo::System::new_all();
     system.refresh_all();
-
-    // /proc/cpuinfo
 
     let os_version = system.os_version();
     let os = system.long_os_version();
