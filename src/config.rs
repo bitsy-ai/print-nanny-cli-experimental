@@ -9,7 +9,7 @@ pub enum ConfigError {
     MissingAttribute(String),
 }
 
-#[derive(Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Serialize, Deserialize, PartialEq, Clone)]
 pub struct PrintNannySystemConfig {
     pub api_token: String,
     pub api_url: String,

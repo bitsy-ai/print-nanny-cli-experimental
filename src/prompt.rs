@@ -1,7 +1,9 @@
 
+use log::{ info };
 use sysinfo::{ProcessExt, SystemExt};
 use dialoguer::Input;
-
+use anyhow::{ Result };
+use anyhow;
 
 pub fn prompt_token_input(email: &str) -> String {
     let prompt = format!("⚪ Please enter the 6-digit code emailed to {}", email.to_string());
@@ -16,11 +18,12 @@ pub fn prompt_token_input(email: &str) -> String {
 pub fn prompt_device_name() -> String {
     let mut system = sysinfo::System::new_all();
     system.refresh_all();
-    let hostname = system.hostname();
-    let prompt = format!("⚪ Please a name for this device:");
-    Input::new()
+    let hostname = system.host_name().unwrap();
+    let prompt = "⚪ Please a name for this device:";
+    let input = Input::new()
         .with_prompt(prompt)
         .default(hostname)
         .interact_text()
-        .unwrap()
+        .unwrap();
+    input
 }

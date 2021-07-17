@@ -3,7 +3,6 @@ use log::{info, warn, error, debug, trace };
 
 use serde::{ Serialize, Deserialize };
 use futures::executor::block_on;
-use dialoguer::Input;
 use anyhow::{ Context, Result };
 
 use print_nanny_client::models::{ 
@@ -12,20 +11,11 @@ use print_nanny_client::models::{
     EmailAuthRequest,
     TokenResponse,
 };
-use print_nanny_client::apis::auth_api::{ auth_email_create, auth_token_create, auth_verify_create };
+use print_nanny_client::apis::auth_api::{ auth_email_create, auth_token_create };
 use print_nanny_client::apis::configuration::{ Configuration as PrintNannyAPIConfig };
 use crate::config::{ PrintNannySystemConfig };
-
-pub fn prompt_token_input(email: &str) -> String {
-    let prompt = format!("⚪ Please enter the 6-digit code emailed to {}", email.to_string());
-    let input : String = Input::new()
-        .with_prompt(prompt)
-        .interact_text()
-        .unwrap();
-    info!("Received input code {}", input);
-    return input;
-}
-
+use crate::device::{ device_identity_update_or_create };
+use crate::prompt::{ prompt_device_name, prompt_token_input };
 
 async fn verify_2fa_send_email(api_config: &PrintNannyAPIConfig, email: &str) -> Result<DetailResponse> {
     // Sends an email containing an expiring one-time password (6 digits)
@@ -46,7 +36,7 @@ async fn verify_2fa_code(api_config: &PrintNannyAPIConfig, token: String, email:
 }
 
 pub async fn verify_2fa_auth(config: &PrintNannySystemConfig) -> Result<TokenResponse> {
-    let mut api_config = print_nanny_client::apis::configuration::Configuration{
+    let api_config = print_nanny_client::apis::configuration::Configuration{
         base_path:config.api_url.to_string(), ..Default::default() 
     };
     verify_2fa_send_email(&api_config, &config.email).await?;
@@ -61,8 +51,11 @@ pub async fn verify_2fa_auth(config: &PrintNannySystemConfig) -> Result<TokenRes
 }
 
 pub async fn auth(config: &mut PrintNannySystemConfig) -> Result<()> {
-    let res = verify_2fa_auth(&config).await?;
-    config.api_token = res.token;
-    confy::store("printnanny", config)?;
+    let token_res = verify_2fa_auth(&config).await?;
+    config.api_token = token_res.token;
+    confy::store("printnanny", config.clone())?;
+    let device_name = prompt_device_name();
+    let pki_res = device_identity_update_or_create(config, &device_name);
+
     Ok(())
 }
