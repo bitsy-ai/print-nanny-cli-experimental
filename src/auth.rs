@@ -52,7 +52,10 @@ pub async fn auth(config: &mut PrintNannySystemConfig) -> Result<()> {
     config.api_token = token_res.token;
     confy::store("printnanny", config.clone())?;
     let device_name = prompt_device_name();
-    let pki_res = device_identity_update_or_create(config, &device_name);
+    let pki_res = device_identity_update_or_create(config, &device_name).await?;
+    config.device_identity = Some(pki_res.clone());
+    confy::store("printnanny", config.clone())?;
+    println!("✅ Success! Registered device fingerprint {:?}", pki_res.fingerprint);
 
     Ok(())
 }
