@@ -5,7 +5,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2199.750
+cpu MHz		: 2199.816
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -33,7 +33,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2197.106
+cpu MHz		: 2199.638
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -61,7 +61,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2198.316
+cpu MHz		: 2195.682
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -89,7 +89,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2199.477
+cpu MHz		: 2199.310
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -117,7 +117,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2199.769
+cpu MHz		: 1867.119
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -145,7 +145,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2199.740
+cpu MHz		: 2041.830
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -173,7 +173,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2199.971
+cpu MHz		: 2593.252
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -201,7 +201,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2199.862
+cpu MHz		: 1873.369
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -229,7 +229,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2082.566
+cpu MHz		: 2199.467
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -257,7 +257,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2168.515
+cpu MHz		: 2199.583
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -285,7 +285,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2505.240
+cpu MHz		: 2199.423
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -313,7 +313,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2166.071
+cpu MHz		: 2199.872
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -341,7 +341,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2198.582
+cpu MHz		: 2622.319
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -369,7 +369,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2199.639
+cpu MHz		: 1865.150
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -397,7 +397,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2199.649
+cpu MHz		: 2799.441
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -425,7 +425,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2199.313
+cpu MHz		: 1866.804
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -453,7 +453,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 1998.265
+cpu MHz		: 2207.316
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -481,7 +481,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 3888.062
+cpu MHz		: 2197.004
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -509,7 +509,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2022.425
+cpu MHz		: 2199.599
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -537,7 +537,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 1992.723
+cpu MHz		: 2199.616
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -565,7 +565,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2544.475
+cpu MHz		: 2199.000
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -593,7 +593,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2445.895
+cpu MHz		: 2200.016
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -621,7 +621,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2199.754
+cpu MHz		: 2199.811
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -649,7 +649,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2195.650
+cpu MHz		: 2200.684
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -677,7 +677,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2199.092
+cpu MHz		: 2196.202
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -705,7 +705,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2198.520
+cpu MHz		: 2196.966
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -733,7 +733,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2199.308
+cpu MHz		: 2200.652
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -761,7 +761,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2199.916
+cpu MHz		: 2200.320
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -789,7 +789,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2082.781
+cpu MHz		: 2200.277
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -817,7 +817,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 1974.349
+cpu MHz		: 2199.004
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -845,7 +845,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2104.194
+cpu MHz		: 2199.482
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -873,7 +873,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2214.160
+cpu MHz		: 2199.147
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -901,7 +901,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2197.894
+cpu MHz		: 2195.980
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -929,7 +929,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2200.077
+cpu MHz		: 2200.659
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -957,7 +957,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2199.704
+cpu MHz		: 2199.537
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -985,7 +985,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2199.224
+cpu MHz		: 2198.906
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -1013,7 +1013,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2199.422
+cpu MHz		: 1879.203
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -1041,7 +1041,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2199.287
+cpu MHz		: 1867.032
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -1069,7 +1069,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2199.630
+cpu MHz		: 2643.407
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -1097,7 +1097,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2199.744
+cpu MHz		: 1868.304
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -1125,7 +1125,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2181.212
+cpu MHz		: 2199.802
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -1153,7 +1153,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2075.821
+cpu MHz		: 2199.542
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -1181,7 +1181,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2202.424
+cpu MHz		: 2199.269
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -1209,7 +1209,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2180.512
+cpu MHz		: 2199.323
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -1237,7 +1237,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2199.431
+cpu MHz		: 2065.198
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -1265,7 +1265,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2198.894
+cpu MHz		: 1865.518
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -1293,7 +1293,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2199.728
+cpu MHz		: 2797.711
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -1321,7 +1321,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2199.878
+cpu MHz		: 1866.412
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -1349,7 +1349,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 1984.245
+cpu MHz		: 2196.311
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -1377,7 +1377,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 4353.215
+cpu MHz		: 2199.740
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -1405,7 +1405,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2345.600
+cpu MHz		: 2199.752
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -1433,7 +1433,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 1977.187
+cpu MHz		: 2199.920
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -1461,7 +1461,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2193.637
+cpu MHz		: 2199.517
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -1489,7 +1489,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2193.146
+cpu MHz		: 2196.474
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -1517,7 +1517,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2199.110
+cpu MHz		: 2198.954
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -1545,7 +1545,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2199.698
+cpu MHz		: 2199.303
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -1573,7 +1573,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2199.342
+cpu MHz		: 2197.699
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -1601,7 +1601,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2199.460
+cpu MHz		: 2199.517
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -1629,7 +1629,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2199.191
+cpu MHz		: 2197.889
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -1657,7 +1657,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2198.908
+cpu MHz		: 2195.393
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -1685,7 +1685,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2197.195
+cpu MHz		: 2199.050
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -1713,7 +1713,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2199.489
+cpu MHz		: 2199.465
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -1741,7 +1741,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 1891.655
+cpu MHz		: 2200.019
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -1769,7 +1769,7 @@ model		: 49
 model name	: AMD Ryzen Threadripper 3970X 32-Core Processor
 stepping	: 0
 microcode	: 0x8301039
-cpu MHz		: 2200.077
+cpu MHz		: 2200.044
 cache size	: 512 KB
 physical id	: 0
 siblings	: 64
@@ -1789,4 +1789,3 @@ clflush size	: 64
 cache_alignment	: 64
 address sizes	: 43 bits physical, 48 bits virtual
 power management: ts ttp tm hwpstate cpb eff_freq_ro [13] [14]
-
