@@ -24,30 +24,30 @@ impl CpuInfo {
         i32::try_from(self.processors.len()).ok()
     }
 
-    pub fn rpi_hardware(&self) -> String {
+    pub fn rpi_hardware(&self) -> Option<String> {
         match &self.extra {
-            Some(v) => v.get("hardware").unwrap().to_string(),
-            None => "Raspberry Pi hardware not detected".to_string(),
+            Some(v) => Some(v.get("hardware").unwrap().to_string()),
+            None => None,
         }
     }
 
-    pub fn rpi_model(&self) -> String {
+    pub fn rpi_model(&self) -> Option<String> {
         match &self.extra {
-            Some(v) => v.get("model").unwrap().to_string(),
-            None => "Raspberry Pi model not detected".to_string(),
+            Some(v) => Some(v.get("model").unwrap().to_string()),
+            None => None,
         }
     }
-    pub fn rpi_revision(&self) -> String {
+    pub fn rpi_revision(&self) -> Option<String> {
         match &self.extra {
-            Some(v) => v.get("revision").unwrap().to_string(),
-            None => "Raspberry Pi revision not detected".to_string(),
+            Some(v) => Some(v.get("revision").unwrap().to_string()),
+            None => None,
         }
     }
 
-    pub fn rpi_serial(&self) -> String {
+    pub fn rpi_serial(&self) -> Option<String> {
         match &self.extra {
-            Some(v) => v.get("serial").unwrap().to_string(),
-            None => "Raspberry Pi serial not detected".to_string(),
+            Some(v) => Some(v.get("serial").unwrap().to_string()),
+            None => None,
         }
     }
 
