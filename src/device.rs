@@ -31,7 +31,7 @@ pub async fn device_identity_update_or_create(config: &PrintNannySystemConfig, n
     // /proc/cpuinfo
     let cpuinfo = CpuInfo::new()?;
     let cores = cpuinfo.cores().unwrap();
-    let cpu_flags = cpuinfo.cpu_flags()?.to_string();
+    let cpu_flags = cpuinfo.cpu_flags()?;
     let hardware = cpuinfo.rpi_hardware();
     let model = cpuinfo.rpi_model();
     let serial = cpuinfo.rpi_serial();

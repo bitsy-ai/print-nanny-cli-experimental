@@ -9,12 +9,12 @@ pub struct CpuInfo {
 }
 
 impl CpuInfo {
-    pub fn cpu_flags(&self) -> Result<&str> {
+    pub fn cpu_flags(&self) -> Result<Vec<String>> {
         let cpu0 = &self.processors[0];
         if cpu0.contains_key("features"){
-            Ok(&cpu0["features"])
+            Ok(cpu0["features"].split_whitespace().map(|s| s.to_string()).collect())
         } else if cpu0.contains_key("flags"){
-            Ok(&cpu0["flags"])
+            Ok(cpu0["flags"].split_whitespace().map(|s| s.to_string()).collect())
         } else {
             Err(anyhow!("Failed to parse cpu flags from cpu0 block {:?}", cpu0))
         }
