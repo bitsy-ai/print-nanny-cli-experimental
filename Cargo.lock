@@ -314,9 +314,9 @@ checksum = "631ae5198c9be5e753e5cc215e1bd73c2b466a3565173db433f52bb9d3e66dba"
 
 [[package]]
 name = "cc"
-version = "1.0.68"
+version = "1.0.69"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4a72c244c1ff497a746a7e1fb3d14bd08420ecda70c8f25c7112f2781652d787"
+checksum = "e70cc2f62c6ce1868963827bd677764c62d07c3d9a3e1fb1177ee1a9ab199eb2"
 
 [[package]]
 name = "cfg-if"
@@ -1378,9 +1378,9 @@ dependencies = [
 
 [[package]]
 name = "print-nanny-client"
-version = "0.8.4-dev7"
+version = "0.8.5-dev3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8bb56cad0d559d7a923eb507ef95c3b9b66d0d92555a49e3cb3d27b010ae7dc8"
+checksum = "cbe8ee62767b4d21fca62062291b636aec08f9b877ff96661cfa422895c7f952"
 dependencies = [
  "reqwest",
  "serde",
