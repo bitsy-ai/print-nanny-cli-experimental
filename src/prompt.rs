@@ -6,6 +6,24 @@ use print_nanny_client::models::{
     PrinterProfileRequest
 };
 
+pub fn prompt_email(default_email: &Option<String>) -> String {
+    let prompt = "⚪ Please your email address";
+    match default_email {
+        Some(v) => {
+            return Input::new()
+            .with_prompt(prompt)
+            .default(v.to_string())
+            .interact_text()
+            .unwrap();
+        },
+        None => {
+            return Input::new()
+                .with_prompt(prompt)
+                .interact_text()
+                .unwrap();
+        }
+    };
+}
 
 pub fn prompt_token_input(email: &str) -> String {
     let prompt = format!("⚪ Please enter the 6-digit code emailed to {}", email.to_string());

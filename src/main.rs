@@ -84,7 +84,7 @@ async fn main() -> Result<()> {
     match app_m.subcommand() {
         ("auth", Some(_sub_m)) => {
             if let Some(email) = app_m.value_of("email"){
-                config.email = email.to_string();
+                config.email = Some(email.to_string());
             }
             if let Err(err) = auth(&mut config, config_name).await {
                 if verbosity > 0 {
