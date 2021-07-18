@@ -37,14 +37,7 @@ async fn main() -> Result<()> {
         .multiple(true)
         .help("Sets the level of verbosity"))
         .subcommand(SubCommand::with_name("auth")
-            .about("Connect your Print Nanny account")
-            .arg(Arg::with_name("email")
-                .long("email")
-                .help("Enter the email associated with your Print Nanny account")
-                .value_name("EMAIL")
-                .takes_value(true)
-                .required(true)
-            ))
+            .about("Connect your Print Nanny account"))
         .subcommand(SubCommand::with_name("config")
             .about("Manage Print Nanny configuration")
             .setting(AppSettings::ArgRequiredElseHelp)
@@ -61,7 +54,8 @@ async fn main() -> Result<()> {
         
     let app_m = app.get_matches();
 
-    let config_name = app_m.value_of("config").unwrap_or(app_name);
+    let default_config_name = "default-config";
+    let config_name = app_m.value_of("config").unwrap_or(default_config_name);
     info!("Using config file: {}", config_name);
 
     // Vary the output based on how many times the user used the "verbose" flag
@@ -74,7 +68,7 @@ async fn main() -> Result<()> {
         3 | _ => builder.filter_level(LevelFilter::Trace).init(),
     };
     
-    let mut config = load_config(&config_name, &app_name)?;
+    let mut config = load_config(&app_name, &config_name)?;
     if let Some(api_url) = app_m.value_of("api-url") {
         config.api_url = api_url.to_string();
         info!("Using api-url {}", config.api_url);
@@ -82,10 +76,7 @@ async fn main() -> Result<()> {
 
     match app_m.subcommand() {
         ("auth", Some(_sub_m)) => {
-            if let Some(email) = app_m.value_of("email"){
-                config.email = Some(email.to_string());
-            }
-            if let Err(err) = auth(&mut config, config_name).await {
+            if let Err(err) = auth(&mut config, app_name, config_name).await {
                 if verbosity > 0 {
                     eprintln!("Error: {:#?}", err);
                 } else {

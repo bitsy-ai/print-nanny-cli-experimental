@@ -13,15 +13,19 @@ pub enum ConfigError {
 
 #[derive(Debug, Serialize, Deserialize, PartialEq, Clone)]
 pub struct PrintNannySystemConfig {
-    pub api_token: Option<String>,
+    #[serde(default)]
     pub api_url: String,
+    #[serde(default)]
+    pub api_token: Option<String>,
+    #[serde(default)]
     pub email: Option<String>,
+    #[serde(default)]
     pub device_identity: Option<DeviceIdentity>
 }
 
 impl ::std::default::Default for PrintNannySystemConfig {
     fn default() -> Self { Self { 
-        api_url: "https://www.print-nanny.com".into(),
+        api_url: "https://www.print-nanny.com".to_string(),
         api_token: None,
         email: None,
         device_identity: None
@@ -53,12 +57,8 @@ impl ::std::default::Default for PrintNannySystemConfig {
 //     assert_eq!(result, expected);
 // }
 
-pub fn load_config(configfile: &str, default_configfile: &str) -> Result<PrintNannySystemConfig, confy::ConfyError> {
-    if configfile == default_configfile {
-        return confy::load(configfile); // platform-specific default config path
-    } else {
-        return confy::load_path(configfile); // load full path instead
-    }
+pub fn load_config(app_name: &str, config_name: &str) -> Result<PrintNannySystemConfig, confy::ConfyError> {
+    return confy::load(app_name, config_name); // platform-specific default config path
 }
 
 pub fn config_show(config: &PrintNannySystemConfig) {

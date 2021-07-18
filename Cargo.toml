@@ -21,7 +21,7 @@ httpmock = "0.5"
 [dependencies]
 anyhow = "1"
 clap = "2"
-confy = "0.4"
+confy = { default_features = false, features = ["yaml_conf"], git = "https://github.com/rust-cli/confy"}
 dialoguer = "0.8"
 env_logger = "0.8"
 futures = "0.3"
