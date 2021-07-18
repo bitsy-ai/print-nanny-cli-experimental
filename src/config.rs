@@ -61,7 +61,7 @@ pub fn load_config(configfile: &str, default_configfile: &str) -> Result<PrintNa
     }
 }
 
-pub fn print_config(config: &PrintNannySystemConfig) {
+pub fn config_show(config: &PrintNannySystemConfig) {
     println!("💜 Your current config:");
     println!("{:#?}", config);
 }

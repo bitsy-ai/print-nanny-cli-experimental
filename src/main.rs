@@ -2,7 +2,7 @@ use anyhow::{ Result };
 use log::{info };
 use printnanny::config::{ 
     load_config,
-    print_config
+    config_show
 };
 use env_logger::Builder;
 use log::LevelFilter;
@@ -10,6 +10,7 @@ use printnanny::auth::{ auth };
 
 extern crate clap;
 use clap::{ Arg, App, SubCommand };
+use clap::{ AppSettings };
 extern crate confy;
 
 
@@ -17,7 +18,7 @@ extern crate confy;
 async fn main() -> Result<()> {
     let mut builder = Builder::new();
     
-    let matches = App::new("printnanny")
+    let app = App::new("printnanny")
         .version("0.1.0")
         .author("Leigh Johnson <leigh@bitsy.ai>")
         .about("Official Print Nanny CLI https://print-nanny.com")
@@ -46,8 +47,15 @@ async fn main() -> Result<()> {
                 .required(true)
             ))
         .subcommand(SubCommand::with_name("config")
-            .about("Show current Print Nanny configuration"))
-        .get_matches();
+            .setting(AppSettings::ArgRequiredElseHelp)
+            .subcommand(SubCommand::with_name("show")
+            .about("Show current Print Nanny configuration")))
+
+
+        .subcommand(SubCommand::with_name("printer")
+        .about("Connect a printer & camera stream to Print Nanny"));
+        
+    let matches = app.get_matches();
 
     let default_configfile = "printnanny";
     let configfile = matches.value_of("config").unwrap_or(default_configfile);
@@ -69,7 +77,7 @@ async fn main() -> Result<()> {
         info!("Using api-url {}", config.api_url);
     }
 
-    if let Some(matches) = matches.subcommand_matches("auth") {
+    if let Some(_subcommand) = matches.subcommand_matches("auth") {
         if let Some(email) = matches.value_of("email"){
             config.email = email.to_string();
         }
@@ -81,8 +89,8 @@ async fn main() -> Result<()> {
             }
             std::process::exit(1);
         };
-    } else if let Some(_matches) = matches.subcommand_matches("config") {
-        print_config(&config);
+    } else if let Some(_subcommand) = matches.subcommand_matches("config show") {
+        config_show(&config);
     }
     Ok(())
 }
