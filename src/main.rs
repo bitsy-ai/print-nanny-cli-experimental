@@ -47,23 +47,28 @@ async fn main() -> Result<()> {
                 .required(true)
             ))
         .subcommand(SubCommand::with_name("config")
+            .about("Manage Print Nanny configuration")
             .setting(AppSettings::ArgRequiredElseHelp)
             .subcommand(SubCommand::with_name("show")
             .about("Show current Print Nanny configuration")))
-
-
         .subcommand(SubCommand::with_name("printer")
-        .about("Connect a printer & camera stream to Print Nanny"));
+            .about("Manage printer/camera connections")
+            .setting(AppSettings::ArgRequiredElseHelp)
+            .subcommand(SubCommand::with_name("add")
+                .about("Add a printer/camera to Print"))
+            .subcommand(SubCommand::with_name("remove"))
+                .about("Remove a printer/camera to Print")
+        );
         
-    let matches = app.get_matches();
+    let app_m = app.get_matches();
 
     let default_configfile = "printnanny";
-    let configfile = matches.value_of("config").unwrap_or(default_configfile);
+    let configfile = app_m.value_of("config").unwrap_or(default_configfile);
     info!("Using config file: {}", configfile);
 
     // Vary the output based on how many times the user used the "verbose" flag
     // (i.e. 'printnanny -v -v -v' or 'printnanny -vvv' vs 'printnanny -v'
-    let verbosity = matches.occurrences_of("v");
+    let verbosity = app_m.occurrences_of("v");
     match verbosity {
         0 => builder.filter_level(LevelFilter::Warn).init(),
         1 => builder.filter_level(LevelFilter::Info).init(),
@@ -72,25 +77,31 @@ async fn main() -> Result<()> {
     };
     
     let mut config = load_config(&configfile, &default_configfile)?;
-    if let Some(api_url) = matches.value_of("api-url") {
+    if let Some(api_url) = app_m.value_of("api-url") {
         config.api_url = api_url.to_string();
         info!("Using api-url {}", config.api_url);
     }
 
-    if let Some(_subcommand) = matches.subcommand_matches("auth") {
-        if let Some(email) = matches.value_of("email"){
-            config.email = email.to_string();
-        }
-        if let Err(err) = auth(&mut config).await {
-            if verbosity > 0 {
-                eprintln!("Error: {:#?}", err);
-            } else {
-                eprintln!("Error: {:?}", err);    
+    match app_m.subcommand() {
+        ("auth", Some(_sub_m)) => {
+            if let Some(email) = app_m.value_of("email"){
+                config.email = email.to_string();
             }
-            std::process::exit(1);
-        };
-    } else if let Some(_subcommand) = matches.subcommand_matches("config show") {
-        config_show(&config);
+            if let Err(err) = auth(&mut config).await {
+                if verbosity > 0 {
+                    eprintln!("Error: {:#?}", err);
+                } else {
+                    eprintln!("Error: {:?}", err);    
+                }
+                std::process::exit(1);
+            };
+        },
+        ("config show", Some(_sub_m)) => {
+            config_show(&config);
+        },
+        cmd => {
+            panic!("Received unhandled command {:?}", cmd)
+        }
     }
     Ok(())
 }
