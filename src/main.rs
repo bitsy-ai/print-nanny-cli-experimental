@@ -61,8 +61,7 @@ async fn main() -> Result<()> {
         
     let app_m = app.get_matches();
 
-    let default_config_name = "default-config";
-    let config_name = app_m.value_of("config").unwrap_or(default_config_name);
+    let config_name = app_m.value_of("config").unwrap_or(app_name);
     info!("Using config file: {}", config_name);
 
     // Vary the output based on how many times the user used the "verbose" flag
@@ -75,7 +74,7 @@ async fn main() -> Result<()> {
         3 | _ => builder.filter_level(LevelFilter::Trace).init(),
     };
     
-    let mut config = load_config(&config_name, &default_config_name)?;
+    let mut config = load_config(&config_name, &app_name)?;
     if let Some(api_url) = app_m.value_of("api-url") {
         config.api_url = api_url.to_string();
         info!("Using api-url {}", config.api_url);
