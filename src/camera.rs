@@ -10,7 +10,7 @@ use crate::auth::{ AuthError };
 
 
 pub async fn camera_add(config: &mut PrintNannySystemConfig) -> Result<()> {
-    let device  = &config.email;
+    let device  = config.device_identity.as_ref();
 
     if device.is_none() {
         Err(AuthError::AuthRequired.into())

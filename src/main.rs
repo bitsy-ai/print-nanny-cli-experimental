@@ -93,7 +93,7 @@ async fn main() -> Result<()> {
         },
         ("camera", Some(sub_m)) => {
             match sub_m.subcommand() {
-                ("add", Some(_printer_m)) => camera_add(&mut config).await?,
+                ("add", Some(_)) => camera_add(&mut config).await?,
                 _ => {}
             }
         },
