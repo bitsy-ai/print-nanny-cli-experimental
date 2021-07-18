@@ -10,6 +10,7 @@ use print_nanny_client::models::{
 };
 use print_nanny_client::apis::auth_api::{ auth_email_create, auth_token_create };
 use print_nanny_client::apis::configuration::{ Configuration as PrintNannyAPIConfig };
+
 use crate::config::{ PrintNannySystemConfig };
 use crate::device::{ device_identity_update_or_create };
 use crate::prompt::{ prompt_device_name, prompt_token_input };
@@ -47,14 +48,14 @@ pub async fn verify_2fa_auth(config: &PrintNannySystemConfig) -> Result<TokenRes
     Ok(api_token)
 }
 
-pub async fn auth(config: &mut PrintNannySystemConfig) -> Result<()> {
+pub async fn auth(config: &mut PrintNannySystemConfig, config_name: &str) -> Result<()> {
     let token_res = verify_2fa_auth(&config).await?;
     config.api_token = token_res.token;
-    confy::store("printnanny", config.clone())?;
+    confy::store(config_name, config.clone())?;
     let device_name = prompt_device_name();
     let pki_res = device_identity_update_or_create(config, &device_name).await?;
     config.device_identity = Some(pki_res.clone());
-    confy::store("printnanny", config.clone())?;
+    confy::store(config_name, config.clone())?;
     println!("✅ Success! Registered device fingerprint {:?}", pki_res.fingerprint);
 
     Ok(())

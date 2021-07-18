@@ -11,13 +11,13 @@ use clap::{ Arg, App, SubCommand };
 use clap::{ AppSettings };
 extern crate confy;
 use printnanny::auth::{ auth };
-use printnanny::printer::{ printer_add };
+use printnanny::camera::{ camera_add };
 
 #[tokio::main]
 async fn main() -> Result<()> {
     let mut builder = Builder::new();
-    
-    let app = App::new("printnanny")
+    let app_name = "printnanny";
+    let app = App::new(app_name)
         .version("0.1.0")
         .author("Leigh Johnson <leigh@bitsy.ai>")
         .about("Official Print Nanny CLI https://print-nanny.com")
@@ -61,9 +61,9 @@ async fn main() -> Result<()> {
         
     let app_m = app.get_matches();
 
-    let default_configfile = "printnanny";
-    let configfile = app_m.value_of("config").unwrap_or(default_configfile);
-    info!("Using config file: {}", configfile);
+    let default_config_name = "default-config";
+    let config_name = app_m.value_of("config").unwrap_or(default_config_name);
+    info!("Using config file: {}", config_name);
 
     // Vary the output based on how many times the user used the "verbose" flag
     // (i.e. 'printnanny -v -v -v' or 'printnanny -vvv' vs 'printnanny -v'
@@ -75,7 +75,7 @@ async fn main() -> Result<()> {
         3 | _ => builder.filter_level(LevelFilter::Trace).init(),
     };
     
-    let mut config = load_config(&configfile, &default_configfile)?;
+    let mut config = load_config(&config_name, &default_config_name)?;
     if let Some(api_url) = app_m.value_of("api-url") {
         config.api_url = api_url.to_string();
         info!("Using api-url {}", config.api_url);
@@ -86,7 +86,7 @@ async fn main() -> Result<()> {
             if let Some(email) = app_m.value_of("email"){
                 config.email = email.to_string();
             }
-            if let Err(err) = auth(&mut config).await {
+            if let Err(err) = auth(&mut config, config_name).await {
                 if verbosity > 0 {
                     eprintln!("Error: {:#?}", err);
                 } else {
@@ -101,9 +101,9 @@ async fn main() -> Result<()> {
                 _ => {}
             }
         },
-        ("printer", Some(sub_m)) => {
+        ("camera", Some(sub_m)) => {
             match sub_m.subcommand() {
-                ("add", Some(_printer_m)) => printer_add(&mut config).await?,
+                ("add", Some(_printer_m)) => camera_add(&mut config).await?,
                 _ => {}
             }
         },
