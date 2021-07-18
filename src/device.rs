@@ -9,11 +9,6 @@ use print_nanny_client::apis::devices_api::{ devices_update_or_create };
 use crate::config::{ PrintNannySystemConfig };
 use crate::cpuinfo::{ CpuInfo };
 
-// TODO
-// Component struct implements sysfs-interface
-// https://docs.rs/sysinfo/0.19.2/sysinfo/struct.Component.html
-// https://www.kernel.org/doc/Documentation/hwmon/sysfs-interface
-
 pub async fn device_identity_update_or_create(config: &PrintNannySystemConfig, name: &str) -> Result<DeviceIdentity> {
     let api_config = print_nanny_client::apis::configuration::Configuration{
         base_path:config.api_url.to_string(),

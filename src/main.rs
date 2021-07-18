@@ -6,13 +6,12 @@ use printnanny::config::{
 };
 use env_logger::Builder;
 use log::LevelFilter;
-use printnanny::auth::{ auth };
-
 extern crate clap;
 use clap::{ Arg, App, SubCommand };
 use clap::{ AppSettings };
 extern crate confy;
-
+use printnanny::auth::{ auth };
+use printnanny::printer::{ printer_add };
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -51,13 +50,13 @@ async fn main() -> Result<()> {
             .setting(AppSettings::ArgRequiredElseHelp)
             .subcommand(SubCommand::with_name("show")
             .about("Show current Print Nanny configuration")))
-        .subcommand(SubCommand::with_name("printer")
-            .about("Manage printer/camera connections")
+        .subcommand(SubCommand::with_name("camera")
+            .about("Manage camera monitored by Print Nanny")
             .setting(AppSettings::ArgRequiredElseHelp)
             .subcommand(SubCommand::with_name("add")
-                .about("Add a printer/camera to Print"))
+                .about("Add a camera to Print Nanny"))
             .subcommand(SubCommand::with_name("remove"))
-                .about("Remove a printer/camera to Print")
+                .about("Remove a camera")
         );
         
     let app_m = app.get_matches();
@@ -99,6 +98,12 @@ async fn main() -> Result<()> {
         ("config", Some(sub_m)) => {
             match sub_m.subcommand() {
                 ("show", Some(_config_m)) => config_show(&config),
+                _ => {}
+            }
+        },
+        ("printer", Some(sub_m)) => {
+            match sub_m.subcommand() {
+                ("add", Some(_printer_m)) => printer_add(&mut config).await?,
                 _ => {}
             }
         },
