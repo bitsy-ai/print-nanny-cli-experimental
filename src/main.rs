@@ -96,12 +96,13 @@ async fn main() -> Result<()> {
                 std::process::exit(1);
             };
         },
-        ("config show", Some(_sub_m)) => {
-            config_show(&config);
+        ("config", Some(sub_m)) => {
+            match sub_m.subcommand() {
+                ("show", Some(_config_m)) => config_show(&config),
+                _ => {}
+            }
         },
-        cmd => {
-            panic!("Received unhandled command {:?}", cmd)
-        }
+        _ => {}
     }
     Ok(())
 }
