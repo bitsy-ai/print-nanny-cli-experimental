@@ -2,22 +2,22 @@ use anyhow::{ Result };
 use log::{info };
 use printnanny::config::{ 
     load_config,
-    print_config
+    config_show
 };
 use env_logger::Builder;
 use log::LevelFilter;
-use printnanny::auth::{ auth };
-
 extern crate clap;
 use clap::{ Arg, App, SubCommand };
+use clap::{ AppSettings };
 extern crate confy;
-
+use printnanny::auth::{ auth };
+use printnanny::camera::{ camera_add };
 
 #[tokio::main]
 async fn main() -> Result<()> {
     let mut builder = Builder::new();
-    
-    let matches = App::new("printnanny")
+    let app_name = "printnanny";
+    let app = App::new(app_name)
         .version("0.1.0")
         .author("Leigh Johnson <leigh@bitsy.ai>")
         .about("Official Print Nanny CLI https://print-nanny.com")
@@ -37,25 +37,30 @@ async fn main() -> Result<()> {
         .multiple(true)
         .help("Sets the level of verbosity"))
         .subcommand(SubCommand::with_name("auth")
-            .about("Connect your Print Nanny account")
-            .arg(Arg::with_name("email")
-                .long("email")
-                .help("Enter the email associated with your Print Nanny account")
-                .value_name("EMAIL")
-                .takes_value(true)
-                .required(true)
-            ))
+            .about("Connect your Print Nanny account"))
         .subcommand(SubCommand::with_name("config")
-            .about("Show current Print Nanny configuration"))
-        .get_matches();
+            .about("Manage Print Nanny configuration")
+            .setting(AppSettings::ArgRequiredElseHelp)
+            .subcommand(SubCommand::with_name("show")
+            .about("Show current Print Nanny configuration")))
+        .subcommand(SubCommand::with_name("camera")
+            .about("Manage camera monitored by Print Nanny")
+            .setting(AppSettings::ArgRequiredElseHelp)
+            .subcommand(SubCommand::with_name("add")
+                .about("Add a camera to Print Nanny"))
+            .subcommand(SubCommand::with_name("remove"))
+                .about("Remove a camera")
+        );
+        
+    let app_m = app.get_matches();
 
-    let default_configfile = "printnanny";
-    let configfile = matches.value_of("config").unwrap_or(default_configfile);
-    info!("Using config file: {}", configfile);
+    let default_config_name = "default-config";
+    let config_name = app_m.value_of("config").unwrap_or(default_config_name);
+    info!("Using config file: {}", config_name);
 
     // Vary the output based on how many times the user used the "verbose" flag
     // (i.e. 'printnanny -v -v -v' or 'printnanny -vvv' vs 'printnanny -v'
-    let verbosity = matches.occurrences_of("v");
+    let verbosity = app_m.occurrences_of("v");
     match verbosity {
         0 => builder.filter_level(LevelFilter::Warn).init(),
         1 => builder.filter_level(LevelFilter::Info).init(),
@@ -63,26 +68,36 @@ async fn main() -> Result<()> {
         3 | _ => builder.filter_level(LevelFilter::Trace).init(),
     };
     
-    let mut config = load_config(&configfile, &default_configfile)?;
-    if let Some(api_url) = matches.value_of("api-url") {
+    let mut config = load_config(&app_name, &config_name)?;
+    if let Some(api_url) = app_m.value_of("api-url") {
         config.api_url = api_url.to_string();
         info!("Using api-url {}", config.api_url);
     }
 
-    if let Some(matches) = matches.subcommand_matches("auth") {
-        if let Some(email) = matches.value_of("email"){
-            config.email = email.to_string();
-        }
-        if let Err(err) = auth(&mut config).await {
-            if verbosity > 0 {
-                eprintln!("Error: {:#?}", err);
-            } else {
-                eprintln!("Error: {:?}", err);    
+    match app_m.subcommand() {
+        ("auth", Some(_sub_m)) => {
+            if let Err(err) = auth(&mut config, app_name, config_name).await {
+                if verbosity > 0 {
+                    eprintln!("Error: {:#?}", err);
+                } else {
+                    eprintln!("Error: {:?}", err);    
+                }
+                std::process::exit(1);
+            };
+        },
+        ("config", Some(sub_m)) => {
+            match sub_m.subcommand() {
+                ("show", Some(_config_m)) => config_show(&config),
+                _ => {}
             }
-            std::process::exit(1);
-        };
-    } else if let Some(_matches) = matches.subcommand_matches("config") {
-        print_config(&config);
+        },
+        ("camera", Some(sub_m)) => {
+            match sub_m.subcommand() {
+                ("add", Some(_)) => camera_add(&mut config).await?,
+                _ => {}
+            }
+        },
+        _ => {}
     }
     Ok(())
 }
