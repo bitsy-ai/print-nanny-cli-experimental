@@ -15,7 +15,6 @@ pub async fn camera_add(config: &mut PrintNannySystemConfig) -> Result<()> {
     if device.is_none() {
         Err(AuthError::AuthRequired.into())
     } else {
-        Ok(())
-        // Ok(prompt_camera_add(device.unwrap().id))
+        Ok(prompt_camera_add(device.unwrap().id))
     }
 }
